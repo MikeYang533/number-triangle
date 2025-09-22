@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -89,18 +90,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        if (Objects.equals(path, "")){
+        if (Objects.equals(path, "")) {
             return this.root;
-        }
-        else if (Objects.equals(path, "l")){
+        } else if (Objects.equals(path, "l")) {
             return this.left.root;
-        }
-        else if (Objects.equals(path, "r")){
+        } else if (Objects.equals(path, "r")) {
             return this.right.root;
         }
-        return retrieve(path.substring(1));
+        if (path.startsWith("l")) {
+            return this.left.retrieve(path.substring(1));
+        } else {
+            return this.right.retrieve(path.substring(1));
+        }
     }
-
     /** Read in the NumberTriangle structure from a file.
      *
      * You may assume that it is a valid format with a height of at least 1,
@@ -119,8 +121,6 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -128,16 +128,59 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] curr = line.split(" ");
+            if (curr.length == 1) {
+                top = new NumberTriangle(Integer.parseInt(curr[0]));
+            }
+            else if (curr.length == 2) {
+                NumberTriangle left = new NumberTriangle(Integer.parseInt(curr[0]));
+                NumberTriangle right = new NumberTriangle(Integer.parseInt(curr[1]));
+                top.setLeft(left);
+                top.setRight(right);
+            }
+            else {
 
-            // TODO process the line
+                int[] newInts = new int[curr.length];
+                for (int k = 0; k < curr.length; k++) {
+                    newInts[k] = Integer.parseInt(curr[k]);
+                }
+                NumberTriangle[] newNodes = new NumberTriangle[curr.length];
+                for (int i = 0; i < newInts.length; i++) {
+                    newNodes[i] = new NumberTriangle(newInts[i]);
+                }
+                ArrayList<NumberTriangle> parentNodes = parentGetter(top);
+                int firstKid = 0;
+                int secondKid = 1;
+                while (firstKid < parentNodes.size() && secondKid < newNodes.length) {
+                    parentNodes.get(firstKid).left = newNodes[firstKid];
+                    parentNodes.get(firstKid).right = newNodes[secondKid];
+                    firstKid += 1;
+                    secondKid += 1;
+                }
 
+            }
             //read the next line
             line = br.readLine();
         }
         br.close();
         return top;
+    }
+
+    public static ArrayList<NumberTriangle> parentGetter(NumberTriangle top) {
+        ArrayList<NumberTriangle> currentParents = new ArrayList<>();
+        if (top == null) {
+            return currentParents;
+        }
+        if (top.isLeaf()) {
+            currentParents.add(top);
+        }
+        else {
+            ArrayList<NumberTriangle> leftLeafs = top.parentGetter(top.left);
+            ArrayList<NumberTriangle> rightLeafs = top.parentGetter(top.right);
+            currentParents.addAll(leftLeafs);
+            currentParents.addAll(rightLeafs);
+        }
+        return currentParents;
     }
 
     public static void main(String[] args) throws IOException {
