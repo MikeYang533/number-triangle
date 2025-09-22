@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for  (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l'){
+                cur = cur.left;
+            }
+            else if (ch == 'r'){
+                cur = cur.right;
+            }
+        }
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,7 +119,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        java.util.List<NumberTriangle> prevRow = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +128,32 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
-            // TODO process the line
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                String[] parts = trimmed.split("\\s+");
+                java.util.List<NumberTriangle> row = new java.util.ArrayList<>(parts.length);
+
+                for (String p : parts) {
+                    row.add(new NumberTriangle(Integer.parseInt(p)));
+                }
+
+                if (prevRow != null) {
+                    for (int i = 0; i < row.size(); i++) {
+                        NumberTriangle child = row.get(i);
+                        if (i < prevRow.size()) {
+                            prevRow.get(i).setLeft(child);
+                        }
+                        if (i > 0) {
+                            prevRow.get(i - 1).setRight(child);
+                        }
+                    }
+                } else {
+                    top = row.get(0);
+                }
+
+                prevRow = row;
+            }
 
             //read the next line
             line = br.readLine();
@@ -142,3 +173,5 @@ public class NumberTriangle {
         System.out.println(mt.getRoot());
     }
 }
+
+
