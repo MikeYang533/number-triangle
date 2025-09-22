@@ -88,9 +88,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle curr = this;
+        for (int i = 0; i < path.length() && curr != null; i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l')      curr = curr.left;
+            else if (ch == 'r') curr = curr.right;
+            else                ; // ignore anything else (no exceptions)
+        }
+        return (curr == null) ? -1 : curr.getRoot();
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -104,32 +111,39 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
-        InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        InputStream in = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (in == null) throw new FileNotFoundException("Resource not found on classpath: " + fname);
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
-        String line = br.readLine();
-        while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+        java.util.List<java.util.List<Integer>> rows = new java.util.ArrayList<>();
+        for (String line = br.readLine(); line != null; line = br.readLine()) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+            String[] toks = line.split("\\s+");
+            java.util.List<Integer> r = new java.util.ArrayList<>(toks.length);
+            for (String t : toks) r.add(Integer.parseInt(t));
+            rows.add(r);
         }
         br.close();
-        return top;
+
+        int last = rows.size() - 1;
+        java.util.List<NumberTriangle> below = new java.util.ArrayList<>(rows.get(last).size());
+        for (int v : rows.get(last)) below.add(new NumberTriangle(v));
+
+        for (int r = last - 1; r >= 0; r--) {
+            java.util.List<Integer> vals = rows.get(r);
+            java.util.List<NumberTriangle> curr = new java.util.ArrayList<>(vals.size());
+            for (int c = 0; c < vals.size(); c++) {
+                NumberTriangle node = new NumberTriangle(vals.get(c));
+                node.setLeft(below.get(c));       // below-left
+                node.setRight(below.get(c + 1));  // below-right
+                curr.add(node);
+            }
+            below = curr;
+        }
+        return below.get(0);
     }
+
 
     public static void main(String[] args) throws IOException {
 
