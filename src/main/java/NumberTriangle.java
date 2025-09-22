@@ -8,7 +8,7 @@ import java.io.*;
  * The structure is shown below. Observe that the parents of e are b and c, whereas
  * d and f each only have one parent. Each row is complete and will never be missing
  * a node. So each row has one more NumberTriangle object than the row above it.
- *111
+ *1112
  *                  a
  *                b   c
  *              d   e   f
