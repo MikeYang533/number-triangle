@@ -156,7 +156,6 @@ public class NumberTriangle {
             line = br.readLine();
             prev = curr;
         }
-        br.close();
         return top;
     }
 
@@ -164,10 +163,13 @@ public class NumberTriangle {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
 
-        // [not for credit]
-        // you can implement NumberTriangle's maxPathSum method if you want to try to solve
-        // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
-        System.out.println(mt.getRoot());
+        System.out.println(mt.retrieve(""));
+        System.out.println(mt.retrieve("l"));
+        System.out.println(mt.retrieve("r"));
+        System.out.println(mt.retrieve("ll"));
+        System.out.println(mt.retrieve("lr"));
+        System.out.println(mt.retrieve("rl"));
+        System.out.println(mt.retrieve("rr"));
+
     }
 }
