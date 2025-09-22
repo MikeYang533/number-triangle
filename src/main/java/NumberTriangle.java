@@ -107,24 +107,44 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) {
+            throw new FileNotFoundException("Resource not found on classpath: " + fname);
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> prevRow = null;
 
         String line = br.readLine();
         while (line != null) {
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                List<NumberTriangle> currRow = new ArrayList<>(parts.length);
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                // create all nodes for the current row
+                for (String p : parts) {
+                    int val = Integer.parseInt(p);
+                    currRow.add(new NumberTriangle(val));
+                }
 
-            // TODO process the line
+                // link parents to children with sharing:
+                // parent j -> left child currRow[j], right child currRow[j+1]
+                if (prevRow != null) {
+                    for (int j = 0; j < prevRow.size(); j++) {
+                        NumberTriangle parent = prevRow.get(j);
+                        parent.setLeft(currRow.get(j));
+                        parent.setRight(currRow.get(j + 1));
+                    }
+                } else {
+                    // first row: record the top
+                    top = currRow.get(0);
+                }
 
-            //read the next line
+                prevRow = currRow;
+            }
+
+            // read the next line
             line = br.readLine();
         }
         br.close();
