@@ -8,7 +8,7 @@ import java.io.*;
  * The structure is shown below. Observe that the parents of e are b and c, whereas
  * d and f each only have one parent. Each row is complete and will never be missing
  * a node. So each row has one more NumberTriangle object than the row above it.
- *
+ *111
  *                  a
  *                b   c
  *              d   e   f
@@ -25,7 +25,7 @@ import java.io.*;
  * Extra: If you decide to solve the Project Euler problems (see main),
  *        feel free to add extra methods to this class. Just make sure that your
  *        code still compiles and runs so that we can run the tests on your code.
- *
+ *cgf
  */
 public class NumberTriangle {
 
