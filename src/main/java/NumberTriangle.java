@@ -136,7 +136,6 @@ public class NumberTriangle {
         }
         br.close();
 
-        // Link nodes
         for (int i = 0; i < rows.size() - 1; i++) {
             List<NumberTriangle> current = rows.get(i);
             List<NumberTriangle> next = rows.get(i + 1);
@@ -146,7 +145,6 @@ public class NumberTriangle {
             }
         }
 
-        // Return the top of the triangle
         return rows.get(0).get(0);
     }
 
