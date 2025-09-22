@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -119,15 +120,22 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
+        ArrayList<ArrayList<NumberTriangle>> branches = new ArrayList<>();
         // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
+            String[] numbers = line.split(" ");
+            ArrayList<NumberTriangle> children = new ArrayList<>();
+            for (String num: numbers) {
+                int val = Integer.parseInt(num);
+                NumberTriangle root = new NumberTriangle(val);
+                children.add(root);
+            }
+            branches.add(children);
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
@@ -138,7 +146,17 @@ public class NumberTriangle {
             line = br.readLine();
         }
         br.close();
-        return top;
+         for (int i = 0; i < branches.size() - 1; i++) {
+             ArrayList<NumberTriangle> curr = branches.get(i);
+             ArrayList<NumberTriangle> next = branches.get(i+1);
+
+             for (int j = 0; j < curr.size(); j ++) {
+                 NumberTriangle current = curr.get(j);
+                 current.setLeft(next.get(j));
+                 current.setRight(next.get(j+1));
+             }
+         }
+        return branches.get(0).get(0);
     }
 
     public static void main(String[] args) throws IOException {
