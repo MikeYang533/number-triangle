@@ -110,7 +110,11 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        // variables to accumulate rows and help link nodes
+        java.util.List<NumberTriangle> previousRow = null;
+        java.util.List<NumberTriangle> currentRow = null;
+        int rowIndex = 0;
+        String[] tokens = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,7 +126,31 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            // process the line
+            tokens = line.trim().split("\\s+");
+            currentRow = new java.util.ArrayList<>(tokens.length);
+
+            // create nodes for the current row
+            for (String tok : tokens) {
+                if (tok.length() == 0) continue; // minimal guard; inputs are valid per spec
+                currentRow.add(new NumberTriangle(Integer.parseInt(tok)));
+            }
+
+            // set top on first row
+            if (previousRow == null) {
+                top = currentRow.get(0);
+            } else {
+                // link previous row nodes to current row nodes
+                for (int i = 0; i < previousRow.size(); i++) {
+                    NumberTriangle parent = previousRow.get(i);
+                    parent.setLeft(currentRow.get(i));
+                    parent.setRight(currentRow.get(i + 1));
+                }
+            }
+
+            // advance rows
+            previousRow = currentRow;
+            rowIndex++;
 
             //read the next line
             line = br.readLine();
