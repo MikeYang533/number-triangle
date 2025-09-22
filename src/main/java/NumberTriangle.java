@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,12 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty())
+            return root;
+        else if (path.charAt(0) == 'r')
+            return right.retrieve(path.substring(1));
+        else
+            return left.retrieve(path.substring(1));
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,20 +115,39 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
+        List<NumberTriangle> prevRow = new ArrayList<>();
+        List<NumberTriangle> currRow = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
+            // split numbers in the row
+            String[] parts = line.trim().split("\\s+");
+            currRow.clear();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // build NumberTriangle nodes for this row
+            for (String p : parts) {
+                int val = Integer.parseInt(p);
+                currRow.add(new NumberTriangle(val));
+            }
 
-            // TODO process the line
+            // connect this row to the previous row
+            if (!prevRow.isEmpty()) {
+                for (int i = 0; i < prevRow.size(); i++) {
+                    NumberTriangle parent = prevRow.get(i);
+                    // each parent connects to two children:
+                    parent.setLeft(currRow.get(i));
+                    parent.setRight(currRow.get(i + 1));
+                }
+            } else {
+                // first row → top node
+                top = currRow.get(0);
+            }
+
+            // shift rows
+            prevRow = new ArrayList<>(currRow);
 
             //read the next line
             line = br.readLine();
