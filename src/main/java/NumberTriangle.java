@@ -63,7 +63,16 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        if (left == null && right == null) {
+            return;
+        }
+        left.maxSumPath();
+        right.maxSumPath();
+        int leftSum = (left != null ? left.root : 0);
+        int rightSum = (right != null ? right.root : 0);
+        root = root + Math.max(leftSum, rightSum);
+        left = null;
+        right = null;
     }
 
 
@@ -88,7 +97,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        if (path.length() == 0) {
+            return root;
+        }
+        char first = path.charAt(0);
+        String rest = path.substring(1);
+        if (first == 'l') {
+            return left.retrieve(rest);
+        }
+        if (first == 'r') {
+            return right.retrieve(rest);
+        }
         return -1;
     }
 
@@ -110,7 +129,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        NumberTriangle[] preRow = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -118,12 +137,22 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
+            String[] nodes_str = line.split("\\s+");
+            NumberTriangle[] nodes = new NumberTriangle[nodes_str.length];
+            for (int i = 0; i < nodes_str.length; i++) {
+                int r = Integer.parseInt(nodes_str[i]);
+                nodes[i] = new NumberTriangle(r);
+            }
+            if (top == null) {
+                top = nodes[0];
+            } else {
+                for (int i = 0; i < preRow.length; i++) {
+                    preRow[i].setLeft(nodes[i]);
+                    preRow[i].setRight(nodes[i + 1]);
+                }
+            }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
+            preRow = nodes;
             //read the next line
             line = br.readLine();
         }
