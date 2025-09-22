@@ -88,8 +88,15 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path == null || path.isEmpty()) {
+            return this.root;
+        }
+        NumberTriangle node = this;
+        char[] steps = path.toCharArray();
+        for (char c : steps) {
+            node = (c == 'l') ? node.left : node.right;
+        }
+        return node.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,7 +117,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        // Track previous row of nodes to wire parents to children
+        NumberTriangle[] prevRow = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -118,11 +126,36 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                int n = parts.length;
+                NumberTriangle[] currRow = new NumberTriangle[n];
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                // Create nodes for this row
+                for (int i = 0; i < n; i++) {
+                    currRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
+                }
 
-            // TODO process the line
+                // Wire parents (prevRow) to children (currRow)
+                if (prevRow != null) {
+                    int m = prevRow.length; // m + 1 == n
+                    // Left edge
+                    prevRow[0].setLeft(currRow[0]);
+                    // Middle nodes: each currRow[i] is right child of prevRow[i-1] and left child of prevRow[i]
+                    for (int i = 1; i < m; i++) {
+                        prevRow[i - 1].setRight(currRow[i]);
+                        prevRow[i].setLeft(currRow[i]);
+                    }
+                    // Right edge
+                    prevRow[m - 1].setRight(currRow[n - 1]);
+                } else {
+                    // This is the first row
+                    top = currRow[0];
+                }
+
+                prevRow = currRow;
+            }
 
             //read the next line
             line = br.readLine();
