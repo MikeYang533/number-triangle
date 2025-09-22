@@ -100,7 +100,7 @@ public class NumberTriangle {
                 throw new IllegalArgumentException("Invalid char: " + c);
             }
         }
-        return current.root;
+        return current.root;//to the top
     }
 
     /** Read in the NumberTriangle structure from a file.
