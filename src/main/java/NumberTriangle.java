@@ -65,7 +65,19 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        int best = maxPathOrNegInf(this);
+        this.root = best;
+        this.left = null;
+        this.right = null;
+    }
+
+    //helper
+    private static int maxPathOrNegInf(NumberTriangle n) {
+        if (n == null) return Integer.MIN_VALUE / 4;
+        if (n.isLeaf()) return n.root;
+        int leftBest  = maxPathOrNegInf(n.left);
+        int rightBest = maxPathOrNegInf(n.right);
+        return n.root + Math.max(leftBest, rightBest);
     }
 
 
