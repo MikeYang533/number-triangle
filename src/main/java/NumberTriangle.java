@@ -134,6 +134,7 @@ public class NumberTriangle {
             for (int i = 0; i < parts.length; i++) {
                 currentRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
             }
+            // prevRow is first null so it later gets set to currentRow
             if (prevRow != null) {
                 for (int i = 0; i < prevRow.length; i++) {
                     prevRow[i].setLeft(currentRow[i]);
