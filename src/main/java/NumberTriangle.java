@@ -128,6 +128,7 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
             String[] parts = line.trim().split("\\s+");
+            // get rid of all space on the ends and divide by spaces
             NumberTriangle[] currentRow = new NumberTriangle[parts.length];
 
             for (int i = 0; i < parts.length; i++) {
