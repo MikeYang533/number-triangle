@@ -90,19 +90,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
+        //Checking if this is the last destination
         if (path.isEmpty()) {
             return getRoot();
         }
-
         String nextPath = path.substring(1);
         String nextStep = path.substring(0,1);
-
+        //Base on the next path decide where to go.
         if (nextStep.equalsIgnoreCase("l")) {
             return left.retrieve(nextPath);
         }
         else if (nextStep.equalsIgnoreCase("r")) {
             return right.retrieve(nextPath);
         }
+        //Just incase if there are other invalid inputs
         throw  new IllegalArgumentException("Invalid path");
     }
 
