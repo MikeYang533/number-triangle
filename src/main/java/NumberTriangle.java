@@ -98,6 +98,7 @@ public class NumberTriangle {
             if (c == 'l') {
                 return this.left.retrieve(path.substring(1));
             }
+            // had to fix this since I actually had left twice instead of right...
             else {
                 return this.right.retrieve(path.substring(1));
             }
