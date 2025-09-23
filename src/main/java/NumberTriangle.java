@@ -88,16 +88,15 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
 
-//        NumberTriangle curr = this;
-//        for (int i = 0; i < path.length(); i++) {
-//            if (path.charAt(i) == 'l') {
-//                curr = curr.left;
-//            } else {
-//                curr = curr.right;
-//            }
-//        }
-//        return curr.getRoot();
-        return -1;
+        NumberTriangle curr = this;
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                curr = curr.left;
+            } else {
+                curr = curr.right;
+            }
+        }
+        return curr.getRoot();
     }
 
     /**
@@ -128,20 +127,20 @@ public class NumberTriangle {
         line = br.readLine();
         while (line != null) {
             //
-            String[] nums = line.split(" ");
-            ArrayList<NumberTriangle> current_layer = new ArrayList<>();
-            //add create a new triangle with the numer in each line and added it to current layer
-            for (String num : nums) {
-                current_layer.add(new NumberTriangle(Integer.valueOf(num)));
-            }
-            //add sub triangle for previous based on the current layer.
-            for (int i = 0; i < previous_layer.size(); i++) {
-                previous_layer.get(i).setLeft(current_layer.get(i));
-                previous_layer.get(i).setRight(current_layer.get(i + 1));
-            }
-            //set the previous layer as the current layer, read nextline
-            previous_layer = current_layer;
-            line = br.readLine();
+//            String[] nums = line.split(" ");
+//            ArrayList<NumberTriangle> current_layer = new ArrayList<>();
+//            //add create a new triangle with the numer in each line and added it to current layer
+//            for (String num : nums) {
+//                current_layer.add(new NumberTriangle(Integer.valueOf(num)));
+//            }
+//            //add sub triangle for previous based on the current layer.
+//            for (int i = 0; i < previous_layer.size(); i++) {
+//                previous_layer.get(i).setLeft(current_layer.get(i));
+//                previous_layer.get(i).setRight(current_layer.get(i + 1));
+//            }
+//            //set the previous layer as the current layer, read nextline
+//            previous_layer = current_layer;
+//            line = br.readLine();
         }
         br.close();
         return top;
