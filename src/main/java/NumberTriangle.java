@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+            if (c == 'l' || c == 'L') {
+                cur = cur.left;
+            }else if  (c == 'r' || c == 'R') {
+                cur = cur.right;
+            }
+        }
         // TODO implement this method
-        return -1;
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -112,23 +121,45 @@ public class NumberTriangle {
 
         // TODO define any variables that you want to use to store things
 
+        java.util.List<java.util.List<NumberTriangle>> rows = new java.util.ArrayList<>();
+
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
+        // NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
+            // System.out.println(line);
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                java.util.List<NumberTriangle> row = new java.util.ArrayList<>(parts.length);
+                for (String p : parts) {
+                    row.add(new NumberTriangle(Integer.parseInt(p)));
+                }
+                rows.add(row);
+            }
             // TODO process the line
+
 
             //read the next line
             line = br.readLine();
         }
+        for (int i = 0; i < rows.size() - 1; i++) {
+            java.util.List<NumberTriangle> cur = rows.get(i);
+            java.util.List<NumberTriangle> nxt = rows.get(i + 1);
+            for (int j = 0; j < cur.size(); j++) {
+                cur.get(j).setLeft(nxt.get(j));
+                cur.get(j).setRight(nxt.get(j + 1));
+            }
+        }
+
         br.close();
+        NumberTriangle top = rows.get(0).get(0);
         return top;
+
     }
 
     public static void main(String[] args) throws IOException {
