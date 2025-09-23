@@ -19,7 +19,7 @@ what you are tasked with for this task.
 - [x] Implement the static method for loading a number triangle from a file.
   - Create an issue for this in your repo, write your code on a branch, make a PR once finished, and merge your PR. 
 
-- [x] Implement the retrieve method.
+- [] Implement the retrieve method.
   - Create an issue for this in your repo, write your code on a branch, make a PR once finished, and merge your PR.
 
 ## Requirements:
