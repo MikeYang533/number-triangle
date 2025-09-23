@@ -1,10 +1,10 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
  *
  * Note: This is like a tree, but some nodes in the structure have two parents.
- *
  * The structure is shown below. Observe that the parents of e are b and c, whereas
  * d and f each only have one parent. Each row is complete and will never be missing
  * a node. So each row has one more NumberTriangle object than the row above it.
@@ -88,8 +88,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                current = current.left;
+            } else if (ch == 'r') {
+                current = current.right;
+            }
+        }
+        return current.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,7 +118,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,10 +130,7 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+        line = br.readLine();
         }
         br.close();
         return top;
