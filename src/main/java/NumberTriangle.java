@@ -110,8 +110,6 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -122,10 +120,32 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] parents = line.split(" ");
+            NumberTriangle[] parentTriangles = new NumberTriangle[parents.length];
+
+            for (int i = 0; i < parentTriangles.length; i++){
+                parentTriangles[i] = new NumberTriangle(Integer.parseInt(parents[i])); // convert String to Integer and autoboxes
+            }
 
             //read the next line
             line = br.readLine();
+
+            String[] children = line.split(" ");
+            NumberTriangle[] childrenTriangles = new NumberTriangle[children.length];
+
+            for (int i = 0; i < childrenTriangles.length; i++){
+                childrenTriangles[i] = new NumberTriangle(Integer.parseInt(children[i])); // convert String to Integer and autoboxes
+            }
+
+            // at this point parentTriangles.length == childrenTriangles.length - 1
+            for (int i = 0; i < parentTriangles.length; i++){
+                NumberTriangle currParent = parentTriangles[i];
+                NumberTriangle leftChild = childrenTriangles[i];
+                NumberTriangle rightChild = childrenTriangles[i+1];
+
+                currParent.setLeft(leftChild);
+                currParent.setRight(rightChild);
+            }
         }
         br.close();
         return top;
