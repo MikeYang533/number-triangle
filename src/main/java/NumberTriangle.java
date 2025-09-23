@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle myNode = this;
+        char[] charArray = path.toCharArray();
+        for(char x: charArray){
+            if (x == 'l') {
+                myNode = myNode.left;
+            } else if (x == 'r') {
+                myNode = myNode.right;
+            }
+        }
+        return root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -108,7 +117,6 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
 
         // TODO define any variables that you want to use to store things
 
