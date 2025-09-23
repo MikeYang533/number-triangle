@@ -157,7 +157,7 @@ public class NumberTriangle {
                 }
             }
 
-            
+
             rows.add(currRow);
 
             //read the next line
@@ -165,6 +165,8 @@ public class NumberTriangle {
         }
         br.close();
         return top;
+
+        
     }
 
     public static void main(String[] args) throws IOException {
