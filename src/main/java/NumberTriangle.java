@@ -87,6 +87,7 @@ public class NumberTriangle {
      * @return the root value at the location indicated by path
      *
      */
+    // Accidentally did both changes together just a random commit just incase for 2nd pull req
     public int retrieve(String path) {
         String[] seperate = path.split("");
         NumberTriangle temp = this;
