@@ -110,19 +110,40 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        NumberTriangle[][] rows = new NumberTriangle[200][];
+        int rowCount = 0;
 
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
+        // will need to return the top of the NumberTriangle
+        // so might want a variable for that
         NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
+            String[] nums = line.trim().split("\\s+");
+            NumberTriangle[] currentRow = new NumberTriangle[nums.length];
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // make nodes for this row
+            for (int i = 0; i < nums.length; i++) {
+                currentRow[i] = new NumberTriangle(Integer.parseInt(nums[i]));
+            }
 
-            // TODO process the line
+            // if this is the very first row save into top
+            if (rowCount == 0) {
+                top = currentRow[0];
+            }
+
+            // link with prev row
+            if (rowCount > 0) {
+                NumberTriangle[] prevRow = rows[rowCount - 1];
+                for (int i = 0; i < prevRow.length; i++) {
+                    prevRow[i].setLeft(currentRow[i]);
+                    prevRow[i].setRight(currentRow[i + 1]);
+                }
+            }
+
+            // store the row for the next loop
+            rows[rowCount] = currentRow;
+            rowCount++;
 
             //read the next line
             line = br.readLine();
