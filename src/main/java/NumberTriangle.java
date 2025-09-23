@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.equals("")) {
+            return this.root;
+        } else {
+            NumberTriangle next = null;
+            if (path.charAt(0) == 'l') {
+                next = this.left;
+            } else {
+                next = this.right;
+            }
+            return next.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -121,8 +130,8 @@ public class NumberTriangle {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
-            NumberTriangle[] currRow = new NumberTriangle[line.length()];
             String[] nums = line.trim().split("\\s+");
+            NumberTriangle[] currRow = new NumberTriangle[nums.length];
 
             for (int i = 0; i < nums.length; i++) {
                 NumberTriangle node = new NumberTriangle(Integer.parseInt(nums[i]));
@@ -146,6 +155,7 @@ public class NumberTriangle {
         br.close();
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
