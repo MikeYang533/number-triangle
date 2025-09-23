@@ -139,6 +139,7 @@ public class NumberTriangle {
                 for (int i = 0; i < prevRow.length; i++) {
                     prevRow[i].setLeft(currentRow[i]);
                     prevRow[i].setRight(currentRow[i + 1]);
+            // because each following row has one more item than the last
                 }
             } else {
                 top = currentRow[0];
