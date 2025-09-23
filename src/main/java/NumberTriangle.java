@@ -123,32 +123,58 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
-        InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        InputStream inputStream = NumberTriangle.class
+                .getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) {
+            throw new IOException("Resource not found on classpath: " + fname);
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
+        java.util.List<NumberTriangle> prevRow = null;
 
         String line = br.readLine();
         while (line != null) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                // 按空白切分（一个或多个空格/Tab）
+                String[] toks = trimmed.split("\\s+");
+                java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(toks.length);
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                // 为本行创建节点
+                for (String t : toks) {
+                    int val = Integer.parseInt(t);
+                    currRow.add(new NumberTriangle(val));
+                }
 
-            // TODO process the line
+                // 记录最顶层
+                if (top == null) {
+                    top = currRow.get(0);
+                }
 
-            //read the next line
+                // 与上一行连边：prev[i].left = curr[i]; prev[i].right = curr[i+1]
+                if (prevRow != null) {
+                    for (int i = 0; i < prevRow.size(); i++) {
+                        NumberTriangle parent = prevRow.get(i);
+                        parent.setLeft(currRow.get(i));
+                        parent.setRight(currRow.get(i + 1));
+                    }
+                }
+
+                // 本行成为下一轮的 prevRow
+                prevRow = currRow;
+            }
+
+            //（调试打印可删）
+            // System.out.println(line);
+
             line = br.readLine();
         }
         br.close();
+
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
