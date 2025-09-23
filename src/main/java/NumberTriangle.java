@@ -1,4 +1,8 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -111,6 +115,7 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        List<List<NumberTriangle>> levels = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -120,9 +125,23 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
             // TODO process the line
+            String[] nums = line.trim().split("\\s+");
+            List<NumberTriangle> row = new ArrayList<>();
+            for (String num : nums) {
+                row.add(new NumberTriangle(Integer.parseInt(num)));
+            }
+            levels.add(row);
+
+            if (levels.size() > 1) {
+                List<NumberTriangle> prev = levels.get(levels.size() - 2);
+                List<NumberTriangle> curr = levels.get(levels.size() - 1);
+                for (int i = 0; i < prev.size(); i++) {
+                    prev.get(i).setLeft(curr.get(i));
+                    prev.get(i).setRight(curr.get(i + 1));
+                }
+            }
 
             //read the next line
             line = br.readLine();
