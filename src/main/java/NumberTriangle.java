@@ -110,12 +110,10 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
-        NumberTriangle[] prevRow = null;
+        NumberTriangle[] other_row = null;
 
 
         String line = br.readLine();
@@ -126,16 +124,16 @@ public class NumberTriangle {
             for (int i = 0; i < parts.length; i++) {
                 currentRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
             }
-            if (prevRow != null) {
-                for (int i = 0; i < prevRow.length; i++) {
-                    prevRow[i].setLeft(currentRow[i]);
-                    prevRow[i].setRight(currentRow[i + 1]);
+            if (other_row != null) {
+                for (int i = 0; i < other_row.length; i++) {
+                    other_row[i].setLeft(currentRow[i]);
+                    other_row[i].setRight(currentRow[i + 1]);
                 }
             } else {
                 top = currentRow[0];
             }
 
-            prevRow = currentRow;
+            other_row = currentRow;
             line = br.readLine();
         }
         br.close();
