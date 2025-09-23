@@ -25,7 +25,7 @@ import java.io.*;
  * Extra: If you decide to solve the Project Euler problems (see main),
  *        feel free to add extra methods to this class. Just make sure that your
  *        code still compiles and runs so that we can run the tests on your code.
- *
+ *cgf
  */
 public class NumberTriangle {
 
