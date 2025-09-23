@@ -123,13 +123,36 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        ArrayList<NumberTriangle> prevRow = null;
 
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
+            line = line.trim();
 
+            String[] parts = line.split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
+            for (String p : parts) {
+                int val = Integer.parseInt(p);
+                currRow.add(new NumberTriangle(val));
+            }
+
+            if (top == null) {
+                top = currRow.get(0);
+            }
+            if (prevRow != null) {
+                for (int j = 0; j < prevRow.size(); j++) {
+                    NumberTriangle parent = prevRow.get(j);
+                    parent.setLeft(currRow.get(j));
+                    parent.setRight(currRow.get(j + 1));
+                }
+            }
+
+            // move current row to prevRow for the next iteration
+            prevRow = currRow;
+        //read the next line
         line = br.readLine();
         }
         br.close();
