@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -110,7 +112,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        Queue<Integer> toStore = new LinkedList<>();
+        Queue<NumberTriangle> bufferTop = new LinkedList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -120,9 +123,39 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+//            System.out.println(line);
 
-            // TODO process the line
+            String[] numbersStr = line.split(" ");
+            for (int i = 0; i < numbersStr.length; i++) {
+                Integer parsedInt = Integer.parseInt(numbersStr[i]);
+                toStore.offer(parsedInt);
+                if (i != 0 && i != numbersStr.length - 1) {
+                    toStore.offer(parsedInt);
+                }
+            }
+            if (bufferTop.isEmpty()) {
+                top = new NumberTriangle(toStore.poll());
+                bufferTop.offer(top);
+            }
+
+            NumberTriangle previousRight = null;
+            while(!toStore.isEmpty()) {
+                NumberTriangle temp = bufferTop.poll();
+                NumberTriangle left = new NumberTriangle(toStore.poll());
+                NumberTriangle right = new NumberTriangle(toStore.poll());
+
+                if (previousRight != null && previousRight.getRoot() == left.getRoot()) {
+                    left = previousRight;
+                }
+                temp.setLeft(left);
+                temp.setRight(right);
+
+                if (previousRight == null || previousRight.getRoot() != left.getRoot()) {
+                    bufferTop.offer(left);
+                }
+                bufferTop.offer(right);
+                previousRight = right;
+            }
 
             //read the next line
             line = br.readLine();
