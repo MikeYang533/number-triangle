@@ -53,7 +53,6 @@ public class NumberTriangle {
         return root;
     }
 
-
     /**
      * [not for credit]
      * Set the root of this NumberTriangle to be the max path sum
@@ -169,5 +168,6 @@ public class NumberTriangle {
         System.out.println(mt.retrieve("lr"));
         System.out.println(mt.retrieve("rl"));
         System.out.println(mt.retrieve("rr"));
+
     }
 }
