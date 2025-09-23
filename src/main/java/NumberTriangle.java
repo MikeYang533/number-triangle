@@ -122,22 +122,39 @@ public class NumberTriangle {
         if (inputStream == null) throw new IOException("Resource not found: " + fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
         java.util.List<NumberTriangle> prevRow = null;
 
-        String line = br.readLine();
-        while (line != br.readLine()) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
+            if (line.isEmpty()) continue; // skip blank lines
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] toks = line.split("\\s+"); // space-separated ints per row
+            java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(toks.length);
 
-            // TODO process the line
+            for (int i = 0; i < toks.length; i++) {
+                int val = Integer.parseInt(toks[i]);
+                NumberTriangle node = new NumberTriangle(val);
+                currRow.add(node);
 
-            //read the next line
-            line = br.readLine();
+                if (prevRow != null) {
+                    // Link as left child of the node directly above (same index), if exists
+                    if (i < prevRow.size()) {
+                        prevRow.get(i).setLeft(node);
+                    }
+                    // Link as right child of the node above-left (index-1), if exists
+                    if (i - 1 >= 0) {
+                        prevRow.get(i - 1).setRight(node);
+                    }
+                }
+            }
+
+            if (top == null) {
+                // first row has a single node—the top
+                top = currRow.get(0);
+            }
+            prevRow = currRow;
         }
         br.close();
         return top;
