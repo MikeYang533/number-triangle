@@ -90,9 +90,8 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        System.out.println("hi" + path);
         if (path.isEmpty()) {
-            return -1;
+            return getRoot();
         }
 
         String nextPath = path.substring(1);
