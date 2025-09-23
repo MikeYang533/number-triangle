@@ -122,7 +122,7 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
-        NumberTriangle[] other_row = null;
+        NumberTriangle[] thing = null;
 
 
         String line = br.readLine();
@@ -134,16 +134,16 @@ public class NumberTriangle {
             for (int i = 0; i < nums.length; i++) {
                 currentRow[i] = new NumberTriangle(Integer.parseInt(nums[i]));
             }
-            if (other_row != null) {
-                for (int i = 0; i < other_row.length; i++) {
-                    other_row[i].setLeft(currentRow[i]);
-                    other_row[i].setRight(currentRow[i + 1]);
+            if (thing != null) {
+                for (int i = 0; i < thing.length; i++) {
+                    thing[i].setLeft(currentRow[i]);
+                    thing[i].setRight(currentRow[i + 1]);
                 }
             } else {
                 top = currentRow[0];
             }
 
-            other_row = currentRow;
+            thing = currentRow;
 
             //read the next line
             line = br.readLine();
