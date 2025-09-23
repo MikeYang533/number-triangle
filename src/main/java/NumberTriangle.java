@@ -104,33 +104,51 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
-        InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+    InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+    if (inputStream == null) {
+        throw new FileNotFoundException("Resource not found on classpath: " + fname);
+    }
+    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
-        String line = br.readLine();
-        while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+    java.util.List<java.util.List<Integer>> rows = new java.util.ArrayList<>();
+    String line = br.readLine();
+    while (line != null) {
+        line = line.trim();
+        if (!line.isEmpty()) {
+            String[] parts = line.split("\\s+");
+            java.util.List<Integer> nums = new java.util.ArrayList<>(parts.length);
+            for (String p : parts) {
+                nums.add(Integer.parseInt(p));
+            }
+            rows.add(nums);
         }
-        br.close();
-        return top;
+        line = br.readLine();
+    }
+    br.close();
+
+    if (rows.isEmpty()) {
+        throw new IllegalArgumentException("Triangle file has no numbers.");
     }
 
+    // build bottom-up
+    java.util.List<NumberTriangle> nextRow = new java.util.ArrayList<>();
+    for (int val : rows.get(rows.size() - 1)) {
+        nextRow.add(new NumberTriangle(val));
+    }
+    for (int r = rows.size() - 2; r >= 0; r--) {
+        java.util.List<Integer> rvals = rows.get(r);
+        java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(rvals.size());
+        for (int i = 0; i < rvals.size(); i++) {
+            NumberTriangle node = new NumberTriangle(rvals.get(i));
+            node.setLeft(nextRow.get(i));
+            node.setRight(nextRow.get(i + 1));
+            currRow.add(node);
+        }
+        nextRow = currRow;
+    }
+    return nextRow.get(0);
+}
+    
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
