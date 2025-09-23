@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +90,6 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
         return -1;
     }
 
@@ -109,23 +110,33 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+        top = new NumberTriangle(Integer.parseInt(line));
+        ArrayList<NumberTriangle> last = new ArrayList<>();
+        last.add(top);
+        line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
+            // System.out.println(line);
+            String[] parts = line.split(" ");
+            ArrayList<NumberTriangle> current = new ArrayList<>();
+            for(String s: parts){
+                current.add(new NumberTriangle(Integer.parseInt(s)));
+            }
+            last.get(0).setLeft(current.get(0));
+            for(int i = 1; i < last.size(); i++){
+                last.get(i-1).setRight(current.get(i));
+                last.get(i).setLeft(current.get(i));
+            }
+            last.get(last.size()-1).setRight(current.get(current.size()-1));
             //read the next line
             line = br.readLine();
+            last = current;
         }
         br.close();
         return top;
@@ -134,11 +145,6 @@ public class NumberTriangle {
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
-
-        // [not for credit]
-        // you can implement NumberTriangle's maxPathSum method if you want to try to solve
-        // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
-        System.out.println(mt.getRoot());
+        System.out.println(mt.retrieve("rl"));
     }
 }
