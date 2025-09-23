@@ -1,4 +1,6 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,21 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        System.out.println("hi" + path);
+        if (path.isEmpty()) {
+            return -1;
+        }
+
+        String nextPath = path.substring(1);
+        String nextStep = path.substring(0,1);
+
+        if (nextStep.equalsIgnoreCase("l")) {
+            return left.retrieve(nextPath);
+        }
+        else if (nextStep.equalsIgnoreCase("r")) {
+            return right.retrieve(nextPath);
+        }
+        throw  new IllegalArgumentException("Invalid path");
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,22 +124,41 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
+        ArrayList<NumberTriangle> previousLine = new ArrayList<NumberTriangle>();
 
         String line = br.readLine();
+        // will need to return the top of the NumberTriangle,
+        // so might want a variable for that.
+        NumberTriangle top = new NumberTriangle(Integer.parseInt(line));
+        previousLine.add(top);
+
+        line = br.readLine();
         while (line != null) {
+            // split by spaces
+            String[] parts = line.split(" ");
+            ArrayList<NumberTriangle> currentLine = new ArrayList<>();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            //Add and convert each part to roots and add them to the tree
+            for (int i = 0; i < parts.length; i++) {
+                NumberTriangle node = new NumberTriangle(Integer.parseInt(parts[i]));
+                currentLine.add(node);
+                if (i == 0) {
+                    // first node of row → only right parent
+                    previousLine.get(0).setLeft(node);
+                }
+                else if (i == parts.length - 1) {
+                    // last node of row → only left parent
+                    previousLine.get(i - 1).setRight(node);
+                }
+                else {
+                    // middle node → connect to two parents
+                    previousLine.get(i - 1).setRight(node);
+                    previousLine.get(i).setLeft(node);
+                }
+            }
 
-            // TODO process the line
-
-            //read the next line
+            //read the next line and move down a row
+            previousLine = currentLine;
             line = br.readLine();
         }
         br.close();
