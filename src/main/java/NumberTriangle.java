@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,20 +111,30 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        // define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
+        NumberTriangle top = new NumberTriangle(Integer.parseInt(br.readLine()));
+        List<NumberTriangle> prev_triangles = new ArrayList<>();
+        prev_triangles.add(top);
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            // Obtain the root numbers found on one row and create an ArrayList of NumberTriangles
+            String[] curr_row = line.trim().split("\\s+");
+            List<NumberTriangle> curr_triangles = new ArrayList<>();
+            for (String s : curr_row) {
+                curr_triangles.add(new NumberTriangle(Integer.parseInt(s)));
+            }
+            // Attach each root number to its corresponding parent(s) on the previous row
+            for (int i = 0; i < prev_triangles.size(); i++) {
+                NumberTriangle left = curr_triangles.get(i);
+                NumberTriangle right = curr_triangles.get(i + 1);
+                prev_triangles.get(i).setLeft(left);
+                prev_triangles.get(i).setRight(right);
+            }
+            prev_triangles = curr_triangles;
 
             //read the next line
             line = br.readLine();
