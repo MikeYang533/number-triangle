@@ -88,9 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        else if (path.equals("l")) {
+            return left.retrieve(path);
+        }
+        else {
+            return right.retrieve(path);
+        }
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -117,7 +125,7 @@ public class NumberTriangle {
         NumberTriangle top = null;
 
         String line = br.readLine();
-        while (line != null) {
+        while (line` != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
