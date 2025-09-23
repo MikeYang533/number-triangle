@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -130,34 +129,15 @@ public class NumberTriangle {
         java.util.List<NumberTriangle> prevRow = null;
 
         String line = br.readLine();
-        while ((line = br.readLine())  != null) {
+        while (line != br.readLine()) {
 
-            line = line.trim();
-            if (line.isEmpty()) continue;
+            // remove when done; this line is included so running starter code prints the contents of the file
+            System.out.println(line);
 
-            String[] toks = line.split("\\s+");
-            java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(toks.length);
+            // TODO process the line
 
-            for (int i = 0; i < toks.length; i++) {
-                int val = Integer.parseInt(toks[i]);
-                NumberTriangle node = new NumberTriangle(val);
-                currRow.add(node);
-
-                if (prevRow != null) {
-                    if (i < prevRow.size()) {
-                        prevRow.get(i).setLeft(node);
-                    }
-                    if (i - 1 >= 0) {
-                        prevRow.get(i - 1).setRight(node);
-                    }
-                }
-            }
-
-            if (top == null) {
-                top = currRow.get(0);
-            }
-            prevRow = currRow;
-
+            //read the next line
+            line = br.readLine();
         }
         br.close();
         return top;
