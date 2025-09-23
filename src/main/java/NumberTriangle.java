@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -110,19 +112,57 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        // TO DO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
+        NumberTriangle top = new NumberTriangle(Integer.parseInt(br.readLine()));
+        List<List<NumberTriangle>> rows = new ArrayList<>();
+        ArrayList<NumberTriangle> first_row = new ArrayList<>();
+        first_row.add(top);
+        rows.add(first_row);
+
+        int curr_line = 2;
 
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // System.out.println(line);
 
-            // TODO process the line
+            // TO DO process the line
+            // get all the numbers in line
+            String[] row_str = line.split(" ");
+            int[] row_int = new int[row_str.length];
+
+            for (int i = 0; i < row_str.length; i++) {
+                row_int[i] = Integer.parseInt(row_str[i]);
+            }
+
+            // Create a NumberTriangle object for each number in line
+            ArrayList<NumberTriangle> curr_row = new ArrayList<>();
+
+            for (int i = 0; i < row_int.length; i++) {
+                NumberTriangle curr = new NumberTriangle(row_int[i]);
+                curr_row.add(curr);
+            }
+
+            // Build connections between all numbers in this row to the numbers from the previous row
+            List<NumberTriangle> prev_row = rows.get(curr_line - 2);
+
+            for (int i = 0; i < prev_row.size(); i++) {
+                // Number 1 in prev_row is connected to Number 1 and 2 in curr_row
+                // Number 2 in prev_row is connected to Number 2 and 3 in curr_row
+                // etc.
+                // If there are n numbers in prev_row, there is guaranteed to be n + 1 numbers in curr_row
+                prev_row.get(i).left = curr_row.get(i);
+                prev_row.get(i).right = curr_row.get(i + 1);
+            }
+
+            // update necessary variables
+            rows.add(curr_row);
+            curr_line++;
+
 
             //read the next line
             line = br.readLine();
