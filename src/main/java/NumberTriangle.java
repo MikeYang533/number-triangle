@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+
+        if (path.isEmpty()) {
+            return root;
+        } else {
+            if (path.charAt(0) == 'l') {
+                return this.left.retrieve(path.substring(1));
+            } else {
+                return this.right.retrieve(path.substring(1));
+                }
+        }
+        // return -1;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,23 +121,44 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> previous_row =  new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // System.out.println(line);
 
-            // TODO process the line
+            String[] processed_line = line.trim().split("\\s");
+            List<NumberTriangle> current_row = new ArrayList<>();
 
+            for (String s : processed_line) {
+                int value = Integer.parseInt(s);
+                current_row.add(new NumberTriangle(value));
+            }
+
+            if (!previous_row.isEmpty()) {
+                for (int i = 0; i < previous_row.size(); i++) {
+                    NumberTriangle parent = previous_row.get(i);
+                    NumberTriangle left_child = current_row.get(i);
+                    NumberTriangle right_child = current_row.get(i + 1);
+                    parent.setLeft(left_child);
+                    parent.setRight(right_child);
+                }
+
+            }
+
+            if (top == null) {
+                top = current_row.get(0);
+            }
             //read the next line
+            previous_row = current_row;
             line = br.readLine();
         }
+
         br.close();
         return top;
     }
