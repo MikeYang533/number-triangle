@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,8 +110,9 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        int rowCnt = 0;
+        int rowIdx = 0;
+        ArrayList<NumberTriangle> triangles = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,10 +124,50 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            // Increment row count by 1.
+            // This number should be 1 for the first line, 2 for the second line, etc.
+            ++rowCnt;
+
+            for (String ele : line.split(" ")) {
+                // Increment row index by 1.
+                // This number should be 1 for the first element, 2 for the second element, and so on.
+                ++rowIdx;
+
+                NumberTriangle curr = new NumberTriangle(Integer.parseInt(ele));
+                triangles.add(curr);
+
+                if (rowCnt > 1) {
+                    // The left and right parents' row index.
+                    int leftParentRowIdx = rowIdx - 1;
+
+                    // The left and right parent's indices.
+                    int prevRowTotalCnt = rowCnt - 1;
+                    int currSize = triangles.size();
+
+                    int prevRowStartIdx = currSize - rowIdx - prevRowTotalCnt;
+                    int prevRowEndIdx = currSize - rowIdx - 1;
+                    int leftParentIndex = currSize - 1 - (rowIdx + prevRowTotalCnt - leftParentRowIdx);
+                    int rightParentIndex = leftParentIndex + 1;
+
+                    if (prevRowStartIdx <= leftParentIndex && leftParentIndex <= prevRowEndIdx) {
+                        // Left parent exists.
+                        triangles.get(leftParentIndex).setRight(curr);
+                    }
+
+                    if (prevRowStartIdx <= rightParentIndex && rightParentIndex <= prevRowEndIdx) {
+                        // Right parent exists.
+                        triangles.get(rightParentIndex).setLeft(curr);
+                    }
+                } else {
+                    // The root node.
+                    top = curr;
+                }
+
+            }
 
             //read the next line
             line = br.readLine();
+            rowIdx = 0;
         }
         br.close();
         return top;
