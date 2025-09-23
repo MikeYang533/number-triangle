@@ -115,16 +115,27 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prevRow = null;
+
 
         String line = br.readLine();
         while (line != null) {
+            String[] parts = line.trim().split("\\s+");
+            NumberTriangle[] currentRow = new NumberTriangle[parts.length];
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            for (int i = 0; i < parts.length; i++) {
+                currentRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
+            }
+            if (prevRow != null) {
+                for (int i = 0; i < prevRow.length; i++) {
+                    prevRow[i].setLeft(currentRow[i]);
+                    prevRow[i].setRight(currentRow[i + 1]);
+                }
+            } else {
+                top = currentRow[0];
+            }
 
-            // TODO process the line
-
-            //read the next line
+            prevRow = currentRow;
             line = br.readLine();
         }
         br.close();
