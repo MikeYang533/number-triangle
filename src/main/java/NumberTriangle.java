@@ -157,6 +157,7 @@ public class NumberTriangle {
                 }
             }
 
+            
             rows.add(currRow);
 
             //read the next line
