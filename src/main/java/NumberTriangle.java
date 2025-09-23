@@ -87,16 +87,6 @@ public class NumberTriangle {
      * @return the root value at the location indicated by path
      */
     public int retrieve(String path) {
-
-//        NumberTriangle curr = this;
-//        for (int i = 0; i < path.length(); i++) {
-//            if (path.charAt(i) == 'l') {
-//                curr = curr.left;
-//            } else {
-//                curr = curr.right;
-//            }
-//        }
-//        return curr.getRoot();
         return -1;
     }
 
