@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -72,6 +73,16 @@ public class NumberTriangle {
     }
 
 
+
+
+    public NumberTriangle getLeft(){
+        return left;
+    }
+
+    public NumberTriangle getRight(){
+        return right;
+    }
+
     /**
      * Follow path through this NumberTriangle structure ('l' = left; 'r' = right) and
      * return the root value at the end of the path. An empty string will return
@@ -88,8 +99,25 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        int result = root;
+        NumberTriangle curr;
+        if (path.isEmpty()){
+            return result;
+        } else if (path.charAt(0) == 'l') {
+            curr = left;
+        } else {
+            curr = right;
+        }
+
+        for(int i = 1; i < path.length(); i++){
+            if (path.charAt(i) == 'l') {
+                curr = curr.getLeft();
+            } else {
+                curr = curr.getRight();
+            }
+        }
+
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,20 +137,33 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
+        ArrayList<NumberTriangle> lastRow = new ArrayList<>();
+        ArrayList<NumberTriangle> nextRow = new ArrayList<>();
 
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
+        NumberTriangle top = null, left = null, right = null;
 
         String line = br.readLine();
+        top = new NumberTriangle(Integer.parseInt(line));
+        lastRow.add(top);
+        line = br.readLine();
+
         while (line != null) {
+            String[] parts = line.split(" ");
+            int[] partsInt = new int[parts.length];
+            for (int i = 0; i < parts.length; i++){
+                partsInt[i] = Integer.parseInt(parts[i]);
+            }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            for (int i = 0; i < lastRow.size(); i++){
+                left = new NumberTriangle(partsInt[i]);
+                right = new NumberTriangle(partsInt[i + 1]);
+                lastRow.get(i).setLeft(left);
+                lastRow.get(i).setRight(right);
+                nextRow.add(left);
+            }
+            nextRow.add(right);
+            lastRow = new ArrayList<>(nextRow);
+            nextRow = new ArrayList<>();
 
             //read the next line
             line = br.readLine();
