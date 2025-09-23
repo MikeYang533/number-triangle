@@ -88,8 +88,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle curr = this;
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+            if (c == 'l') {
+                if (curr.left == null) throw new IllegalArgumentException("Path goes past leaf at index" + i);
+                curr = curr.left;
+            } else if (c == 'r') {
+                if (curr.right == null) throw new IllegalArgumentException("Path goes past leaf at index" + i);
+                curr = curr.right;
+            } else {
+                throw new IllegalArgumentException("Invalid char '" + c+ "' at index" + i + " (use 'l' or 'r')");
+            }
+        }
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -107,25 +119,42 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) throw new IOException("Resource not found: " + fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
+        java.util.List<NumberTriangle> prevRow = null;
 
-        String line = br.readLine();
-        while (line != null) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
+            if (line.isEmpty()) continue; // skip blank lines
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] toks = line.split("\\s+"); // space-separated ints per row
+            java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(toks.length);
 
-            // TODO process the line
+            for (int i = 0; i < toks.length; i++) {
+                int val = Integer.parseInt(toks[i]);
+                NumberTriangle node = new NumberTriangle(val);
+                currRow.add(node);
 
-            //read the next line
-            line = br.readLine();
+                if (prevRow != null) {
+                    // Link as left child of the node directly above (same index), if exists
+                    if (i < prevRow.size()) {
+                        prevRow.get(i).setLeft(node);
+                    }
+                    // Link as right child of the node above-left (index-1), if exists
+                    if (i - 1 >= 0) {
+                        prevRow.get(i - 1).setRight(node);
+                    }
+                }
+            }
+
+            if (top == null) {
+                // first row has a single node—the top
+                top = currRow.get(0);
+            }
+            prevRow = currRow;
         }
         br.close();
         return top;
