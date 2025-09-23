@@ -88,8 +88,18 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        NumberTriangle current = this;
+        for  (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                current = current.left;
+            }  else if (path.charAt(i) == 'r') {
+                current = current.right;
+            }
+        }
+        return current.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,24 +120,36 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prevRow = null;
 
         String line = br.readLine();
         while (line != null) {
+            String[] parts = line.trim().split("\\s+");
+            // get rid of all space on the ends and divide by spaces
+            NumberTriangle[] currentRow = new NumberTriangle[parts.length];
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            for (int i = 0; i < parts.length; i++) {
+                currentRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
+            }
+            // prevRow is first null so it later gets set to currentRow
+            if (prevRow != null) {
+                for (int i = 0; i < prevRow.length; i++) {
+                    prevRow[i].setLeft(currentRow[i]);
+                    prevRow[i].setRight(currentRow[i + 1]);
+            // because each following row has one more item than the last
+                }
+            } else {
+                top = currentRow[0];
+            }
 
-            // TODO process the line
-
-            //read the next line
+            prevRow = currentRow;
             line = br.readLine();
         }
         br.close();
+
         return top;
     }
 
