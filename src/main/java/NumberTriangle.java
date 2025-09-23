@@ -89,6 +89,9 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle cur = this;
+        if (path == null || path.isEmpty()) {
+            return cur.root;
+        }
         for (int i = 0; i < path.length(); i++) {
             char c = path.charAt(i);
             if (c == 'l' || c == 'L') {
@@ -115,8 +118,18 @@ public class NumberTriangle {
     public static NumberTriangle loadTriangle(String fname) throws IOException {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
-        InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        // InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        // BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))
+        InputStream in = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (in == null) {
+            try {
+                in = new FileInputStream(fname);
+            } catch (FileNotFoundException e) {
+                throw new IOException("Could not open triangle file: " + fname, e);
+            }
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
 
 
         // TODO define any variables that you want to use to store things
