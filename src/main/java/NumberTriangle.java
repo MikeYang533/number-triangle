@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +90,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        else {
+            if (path.charAt(0) == 'l') {
+                return left.retrieve(path.substring(1));
+            }
+            else if (path.charAt(0) == 'r') {
+                return right.retrieve(path.substring(1));
+            }
+        }
         return -1;
     }
 
@@ -110,7 +122,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        List<List<NumberTriangle>> rows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,12 +134,31 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] parts = line.trim().split("\\s+");
+
+            List<NumberTriangle> currentRow = new ArrayList<>();
+
+            for (String part : parts) {
+                int value = Integer.parseInt(part);
+                currentRow.add(new NumberTriangle(value));
+            }
+            rows.add(currentRow);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
+        for (int r = 0; r < rows.size() - 1; r++) {
+            List<NumberTriangle> currentRow = rows.get(r);
+            List<NumberTriangle> nextRow = rows.get(r + 1);
+
+            for (int i = 0; i < currentRow.size(); i++) {
+                NumberTriangle parent = currentRow.get(i);
+                parent.setLeft(nextRow.get(i));
+                parent.setRight(nextRow.get(i + 1));
+            }
+        }
+        top = rows.get(0).get(0);
         return top;
     }
 
