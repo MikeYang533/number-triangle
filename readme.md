@@ -5,11 +5,11 @@ This coding task is based on Problem 18 from Project Euler (https://projecteuler
 Solving the problem itself is not the task — loading in the data necessary to then solve the problem is
 what you are tasked with for this task.
 
-## The Purpose:
+## Purpose:
 - To ensure that you have learned the basics of using git and GitHub to be able to contribute to your team.
 - To practice reading in data from an outside source and creating objects to represent that data.
 
-## The Task:
+## Task:
 
 - [ ] Fork this repo and clone a local copy to work in.
 
