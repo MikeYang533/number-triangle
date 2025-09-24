@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,18 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        int val = this.root;
+        if(path == ""){
+            return this.root;
+        }
+        else{
+            if(path.substring(0, 1).equals("l")){
+                return this.left.retrieve(path.substring(1));
+            }
+            else {
+                return this.right.retrieve(path.substring(1));
+            }
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,11 +121,12 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        int linenum = 1;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        ArrayList<NumberTriangle> allnums = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
@@ -122,10 +134,30 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String [] nums = line.split(" ");
+            if(nums.length != linenum){
+                break;
+            }
+            else {
+                if (allnums.isEmpty()){
+                    top = new NumberTriangle(Integer.parseInt(nums[0]));
+                    allnums.add(top);
+                }
+                else{
+                    allnums.add(new NumberTriangle(Integer.parseInt(nums[0])));
+                    for(int i = 0; i < linenum - 1; i++){
+                        NumberTriangle prev = allnums.get(i);
+                        prev.left = allnums.get(linenum + i - 1);
+                        allnums.add(new NumberTriangle(Integer.parseInt(nums[i+1])));
+                        prev.right = allnums.get(linenum + i);
+                    }
+                    allnums.subList(0, linenum - 1).clear();
+                }
+            }
 
             //read the next line
             line = br.readLine();
+            linenum += 1;
         }
         br.close();
         return top;
