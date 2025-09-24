@@ -128,20 +128,19 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             // System.out.println(line);
 
-//            current = line.split("[,\\.\\s]");
-//            for (int i = 0; i < prevTri.size(); i++){
-//                NumberTriangle curr = prevTri.get(i);
-//                NumberTriangle left = new NumberTriangle(Integer.parseInt(current[i]));
-//                NumberTriangle right = new NumberTriangle(Integer.parseInt(current[i + 1]));
-//                if (i ==0){currTri.add(left);} currTri.add(right);
-//                curr.setLeft(left); curr.setRight(right);
-//            }
-//            if (currTri.isEmpty()){
-//                NumberTriangle curr = new NumberTriangle(Integer.parseInt(current[0]));
-//                top = curr;
-//                currTri.add(curr);}
-//            // System.out.println(currTri);
-//            prevTri = (ArrayList)currTri.clone(); currTri.clear();
+            current = line.split("[,\\.\\s]");
+            for (int i = 0; i < prevTri.size(); i++){
+                NumberTriangle curr = prevTri.get(i);
+                NumberTriangle left = new NumberTriangle(Integer.parseInt(current[i]));
+                NumberTriangle right = new NumberTriangle(Integer.parseInt(current[i + 1]));
+                if (i ==0){currTri.add(left);} currTri.add(right);
+                curr.setLeft(left); curr.setRight(right);
+            }
+            if (currTri.isEmpty()){
+                NumberTriangle curr = new NumberTriangle(Integer.parseInt(current[0]));
+                top = curr;
+                currTri.add(curr);}
+            prevTri = (ArrayList)currTri.clone(); currTri.clear();
 
             //read the next line
             line = br.readLine();
