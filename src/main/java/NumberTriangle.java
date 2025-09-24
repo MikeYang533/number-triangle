@@ -140,7 +140,8 @@ public class NumberTriangle {
                 NumberTriangle curr = new NumberTriangle(Integer.parseInt(current[0]));
                 top = curr;
                 currTri.add(curr);}
-            //prevTri = (ArrayList)currTri.clone(); currTri.clear();
+            prevTri = new ArrayList<>(currTri);
+            currTri.clear();
 
             //read the next line
             line = br.readLine();
