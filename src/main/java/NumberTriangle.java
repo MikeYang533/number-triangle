@@ -91,7 +91,6 @@ public class NumberTriangle {
         // TODO implement this method
         return -1;
     }
-
     /** Read in the NumberTriangle structure from a file.
      *
      * You may assume that it is a valid format with a height of at least 1,
@@ -117,13 +116,66 @@ public class NumberTriangle {
         NumberTriangle top = null;
 
         String line = br.readLine();
+
+        // Build up previous array
+        NumberTriangle[] prevLine = new NumberTriangle[1];
+
+
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
             // TODO process the line
+            line = line.trim();
+            
 
+            // process the top root 
+            if (top == null) {
+                top = new NumberTriangle(Integer.parseInt(line));
+                prevLine[0] = top;
+            } else {
+                // build up an array to hold the current Line that will be assigned to be previous line next iteration
+
+                // thsi will be used to get length of array and get the whole string into a list of string "75, 55" -> ["75", "55"]
+                String[] thisLine = line.trim().split("\\s+"); // \\s+ means consecutive whitespaces so "75, 55" -> [77, 55]
+
+                // this array will actually hold our values for current line
+                NumberTriangle[] currentLine = new NumberTriangle[thisLine.length];
+            
+                // loop through the line
+                for (int i = 0; i < currentLine.length; i++) {
+                
+                    // create the new object
+                    NumberTriangle node = new NumberTriangle(Integer.parseInt(thisLine[i]));
+
+                    // add current node to be used for next index
+                    currentLine[i] = node;
+                    
+                    // Connect the object nodes
+
+                    // if i = 0 we just connect i = 0 from prevLine to it
+                    if (i == 0) {
+                        prevLine[0].setLeft(node);
+                    }
+
+                    // if i = line.length - 1 than connect right onto to it
+                    else if(i == currentLine.length - 1) {
+                        prevLine[prevLine.length - 1].setRight(node);
+                    }
+                    
+                    // else if it is not first or end node, add [i - 1].right to this node and [i].left to be this node
+                    else{
+                        prevLine[i - 1].setRight(node);
+                        prevLine[i].setLeft(node);
+                    } 
+                    
+                }
+                prevLine = currentLine;
+
+            }
+
+            
             //read the next line
             line = br.readLine();
         }
@@ -138,7 +190,7 @@ public class NumberTriangle {
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
         // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
+        // mt.maxSumPath();
         System.out.println(mt.getRoot());
     }
 }
