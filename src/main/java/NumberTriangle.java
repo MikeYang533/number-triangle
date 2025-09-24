@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,21 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+
+        for (char direction : path.toCharArray()) {
+            if (direction == 'r') {
+                current = current.right;
+
+            } else if(direction == 'l') {
+                current = current.left;
+
+            }
+
+            }
+        return current.getRoot();
+
+
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,19 +125,44 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        List<List<NumberTriangle>> levels = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+        int currentL = 0;
+
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
+            String[] numbers = line.split(" ");
+            // remove when done; this line is included so running starter code prints the contents of the file
+            List <NumberTriangle> cLNodes = new ArrayList<>();
 
-            // TODO process the line
+            for (String num: numbers) {
+                int val = Integer.parseInt(num);
+                cLNodes.add(new NumberTriangle(val));
+            }
+
+            levels.add(cLNodes);
+
+            if (currentL == 0) {
+                top = cLNodes.get(0);
+            } else {
+                List<NumberTriangle> previousL = levels.get(currentL - 1);
+                for (int i = 0; i < previousL.size(); i++) {
+                    NumberTriangle parent = previousL.get(i);
+                    if (i < cLNodes.size()) {
+                        parent.setLeft(cLNodes.get(i));
+                    }
+                    if (i + 1 < cLNodes.size()) {
+                        parent.setRight(cLNodes.get(i + 1));
+                    }
+                }
+            }
+
+            currentL++;
 
             //read the next line
             line = br.readLine();
