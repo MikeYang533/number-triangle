@@ -91,7 +91,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle current = this;
-
+        // change for the pull request baaaaaaaabbyyyyyy!
         for (char direction : path.toCharArray()) {
             if (direction == 'r') {
                 current = current.right;
