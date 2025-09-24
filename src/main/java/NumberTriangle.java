@@ -115,8 +115,9 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        String[] current;
+        ArrayList<NumberTriangle> prevTri = new ArrayList<NumberTriangle>();
+        ArrayList<NumberTriangle> currTri = new ArrayList<NumberTriangle>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -126,9 +127,22 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // System.out.println(line);
 
-            // TODO process the line
+            current = line.split("[,\\.\\s]");
+            for (int i = 0; i < prevTri.size(); i++){
+                NumberTriangle curr = prevTri.get(i);
+                NumberTriangle left = new NumberTriangle(Integer.parseInt(current[i]));
+                NumberTriangle right = new NumberTriangle(Integer.parseInt(current[i + 1]));
+                if (i ==0){currTri.add(left);} currTri.add(right);
+                curr.setLeft(left); curr.setRight(right);
+            }
+            if (currTri.isEmpty()){
+                NumberTriangle curr = new NumberTriangle(Integer.parseInt(current[0]));
+                top = curr;
+                currTri.add(curr);}
+            // System.out.println(currTri);
+            prevTri = (ArrayList)currTri.clone(); currTri.clear();
 
             //read the next line
             line = br.readLine();
