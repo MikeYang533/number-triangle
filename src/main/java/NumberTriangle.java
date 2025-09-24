@@ -125,10 +125,6 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            // System.out.println(line);
-
             current = line.split("[,\\.\\s]");
             for (int i = 0; i < prevTri.size(); i++){
                 NumberTriangle curr = prevTri.get(i);
