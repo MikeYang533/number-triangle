@@ -109,26 +109,38 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
-        String line = br.readLine();
-        while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+        java.util.List<int[]> rows = new java.util.ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                int[] nums = new int[parts.length];
+                for (int i = 0; i < parts.length; i++) {
+                    nums[i] = Integer.parseInt(parts[i]);
+                }
+                rows.add(nums);
+            }
         }
         br.close();
-        return top;
+
+        java.util.List<NumberTriangle> below = new java.util.ArrayList<>();
+        int last = rows.size() - 1;
+        for (int val : rows.get(last)) {
+            below.add(new NumberTriangle(val));
+        }
+        for (int r = last - 1; r >= 0; r--) {
+            int[] currentRow = rows.get(r);
+            java.util.List<NumberTriangle> currentNodes = new java.util.ArrayList<>();
+            for (int j = 0; j < currentRow.length; j++) {
+                NumberTriangle node = new NumberTriangle(currentRow[j]);
+                node.setLeft(below.get(j));
+                node.setRight(below.get(j + 1));
+                currentNodes.add(node);
+            }
+            below = currentNodes;
+        }
+        return below.get(0); // top node
     }
 
     public static void main(String[] args) throws IOException {
