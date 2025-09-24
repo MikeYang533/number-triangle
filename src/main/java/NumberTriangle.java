@@ -121,8 +121,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle triangle = this;
+
+        for (int i = 0; i < path.length(); i++) {
+            char now = path.charAt(i);
+            if (now == 'l') {
+                triangle = triangle.left;
+            }
+            else {
+                triangle = triangle.right;
+            }
+
+        }
+        return triangle.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
