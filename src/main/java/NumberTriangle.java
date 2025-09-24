@@ -128,7 +128,7 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             // System.out.println(line);
 
-            current = line.split("[,\\.\\s]");
+            current = line.split("[,.\\s]");
             for (int i = 0; i < prevTri.size(); i++){
                 NumberTriangle curr = prevTri.get(i);
                 NumberTriangle left = new NumberTriangle(Integer.parseInt(current[i]));
@@ -140,7 +140,7 @@ public class NumberTriangle {
                 NumberTriangle curr = new NumberTriangle(Integer.parseInt(current[0]));
                 top = curr;
                 currTri.add(curr);}
-            prevTri = (ArrayList)currTri.clone(); currTri.clear();
+            //prevTri = (ArrayList)currTri.clone(); currTri.clear();
 
             //read the next line
             line = br.readLine();
