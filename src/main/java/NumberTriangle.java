@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,8 +110,8 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> previousLayer = new ArrayList<NumberTriangle>();
+        ArrayList<NumberTriangle> newLayer = new ArrayList<NumberTriangle>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +120,25 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            if (top == null) {
+                top = new NumberTriangle(Integer.parseInt(line));
+                previousLayer.add(top);
+            }
+            else{
+                String[] splitLine = line.split(" ");
+                for(String split : splitLine) {
+                    newLayer.add(new NumberTriangle(Integer.parseInt(split)));
+                }
+                for(int i = 0; i < previousLayer.size(); i++) {
+                    previousLayer.get(i).setLeft(newLayer.get(i));
+                    previousLayer.get(i).setRight(newLayer.get(i + 1));
+                }
+                previousLayer.clear();
+                for(NumberTriangle triangle : newLayer) {
+                    previousLayer.add(triangle);
+                }
+                newLayer.clear();
+            }
 
             //read the next line
             line = br.readLine();
