@@ -103,6 +103,7 @@ public class NumberTriangle {
             throw new IllegalArgumentException("Invalid path character: " + direction);
         }
 
+
     }
 
     /** Read in the NumberTriangle structure from a file.
