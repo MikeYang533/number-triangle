@@ -63,7 +63,21 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        if (left == null && right == null) {
+            return;
+        }
+        if (left != null){
+            left.maxSumPath();
+        }
+        if (right != null){
+            right.maxSumPath();
+        }
+        int leftVal = left.root;
+        int rightVal = right.root;
+
+        root += Math.max(leftVal, rightVal);
+        left = null;
+        right = null;
     }
 
 
@@ -88,8 +102,14 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return root;
+        }
+        else if (path.charAt(0) == 'l'){
+            return left.retrieve(path.substring(1));
+        }
+        return right.retrieve(path.substring(1));
+
     }
 
     /** Read in the NumberTriangle structure from a file.
