@@ -140,8 +140,8 @@ public class NumberTriangle {
                     }
                 }
             }
-            count++;
             last_line = cur_line;
+            count++;
             //read the next line
             line = br.readLine();
         }
