@@ -88,29 +88,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
+
         NumberTriangle currentNode = this;
 
-        // Handle empty path case
         if (path.isEmpty()) {
             return currentNode.getRoot();
         }
 
-        // Process each character in the path
         for (int i = 0; i < path.length(); i++) {
             char direction = path.charAt(i);
 
             if (direction == 'l') {
-                if (currentNode.left == null) {
-                    throw new IllegalArgumentException("Cannot go left - null node at step " + i);
-                }
                 currentNode = currentNode.left;
-            } else if (direction == 'r') {
-                if (currentNode.right == null) {
-                    throw new IllegalArgumentException("Cannot go right - null node at step " + i);
-                }
-                currentNode = currentNode.right;
             } else {
-                throw new IllegalArgumentException("Invalid direction '" + direction + "' at position " + i);
+                currentNode = currentNode.right;
             }
         }
 
