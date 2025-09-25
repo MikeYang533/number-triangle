@@ -85,7 +85,7 @@ public class NumberTriangle {
      *
      * @param path the path to follow through this NumberTriangle
      * @return the root value at the location indicated by path
-     *
+     * hghgh
      */
     public int retrieve(String path) {
         NumberTriangle current = this;
