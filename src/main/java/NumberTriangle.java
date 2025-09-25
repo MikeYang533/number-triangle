@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                current = current.left;
+            }
+            else if (path.charAt(i) == 'r') {
+                current = current.right;
+            }
+        }
+        return current.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,20 +119,25 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
+        List<NumberTriangle> nodes_on_level = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
-
+        NumberTriangle top = new NumberTriangle(Integer.parseInt(br.readLine()));
+        nodes_on_level.add(top);
         String line = br.readLine();
+
         while (line != null) {
+            List<NumberTriangle> children = new ArrayList<>();
+            String[] parts = line.trim().split("\\s+");
+            for (int i = 0; i < parts.length; i++) {
+                children.add(new NumberTriangle(Integer.parseInt(parts[i])));
+            }
+            for (int i = 0; i <  nodes_on_level.size(); i++) {
+                nodes_on_level.get(i).left =  children.get(i);
+                nodes_on_level.get(i).right = children.get(i + 1);
+            }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            nodes_on_level = children;
 
             //read the next line
             line = br.readLine();
