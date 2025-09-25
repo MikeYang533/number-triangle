@@ -111,7 +111,6 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
         ArrayList<NumberTriangle> triangles = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
@@ -124,7 +123,6 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
             ArrayList<NumberTriangle> cur_triangles = new ArrayList<>();
             String[] strArr = line.split(" ");
 
