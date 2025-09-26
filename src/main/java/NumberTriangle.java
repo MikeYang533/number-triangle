@@ -147,7 +147,7 @@ public class NumberTriangle {
                     if(i < prevRow.size()){
                         prevRow.get(i).setLeft(currRow.get(i));
                     }
-                    if(i - 1 > 0){
+                    if(i - 1 >= 0){
                         prevRow.get(i - 1).setRight(currRow.get(i));
                     }
                 }
