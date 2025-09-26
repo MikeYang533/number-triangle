@@ -43,6 +43,6 @@ public class NumberTriangleTest {
     public void bigTreeLeftMost() throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
-        assertEquals(4, mt.retrieve("llllllllllllll"));
+        assertEquals(, mt.retrieve("llllllllllllll"));
     }
 }
