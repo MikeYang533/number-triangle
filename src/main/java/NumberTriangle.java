@@ -144,8 +144,10 @@ public class NumberTriangle {
                     top = node;
                 }
                 else{
-                    if(i - 1 >= 0){
-                        prevRow.get(i - 1).setLeft(currRow.get(i));
+                    if(i < prevRow.size()){
+                        prevRow.get(i).setLeft(currRow.get(i));
+                    }
+                    if(i - 1 > 0){
                         prevRow.get(i - 1).setRight(currRow.get(i));
                     }
                 }
