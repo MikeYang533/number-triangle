@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.equals("")) {
+            return this.getRoot();
+        } else {
+            char a = path.charAt(0);
+            String p = path.substring(1);
+            if (a == 'l') {
+                return this.left.retrieve(p);
+            } else {
+                return this.right.retrieve(p);
+            }
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -111,6 +120,7 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        NumberTriangle a = null
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -123,6 +133,7 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+
 
             //read the next line
             line = br.readLine();
