@@ -118,7 +118,7 @@ public class NumberTriangle {
         // so might want a variable for that.
         NumberTriangle top = null;
         NumberTriangle[] prev = null;
-
+//for adding it again.
         String line = br.readLine();
         while (line != null) {
 
