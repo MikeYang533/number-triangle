@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if(path.isEmpty()){
+            return this.root;
+        }
+
+        NumberTriangle currRow = this;
+        for(int i = 0; i < path.length(); i++){
+            if (path.charAt(i) == 'l'){
+                currRow  = currRow.left;
+            }
+            else{
+                currRow = currRow.right;
+            }
+        }
+        return currRow.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,8 +122,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> prevRow = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,11 +131,27 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] tokens = line.split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
 
-            // TODO process the line
+            for (int i = 0; i < tokens.length; i++){
+                int value = Integer.parseInt(tokens[i]);
+                NumberTriangle node = new NumberTriangle(value);
+                currRow.add(node);
 
+                if(prevRow.isEmpty()){
+                    top = node;
+                }
+                else{
+                    if(i < prevRow.size()){
+                        prevRow.get(i).setLeft(currRow.get(i));
+                    }
+                    if(i - 1 >= 0){
+                        prevRow.get(i - 1).setRight(currRow.get(i));
+                    }
+                }
+            }
+            prevRow = currRow;
             //read the next line
             line = br.readLine();
         }
