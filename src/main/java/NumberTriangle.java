@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -148,7 +147,7 @@ public class NumberTriangle {
                     if(i < prevRow.size()){
                         prevRow.get(i).setLeft(currRow.get(i));
                     }
-                    else{
+                    if(i - 1 >= 0){
                         prevRow.get(i - 1).setRight(currRow.get(i));
                     }
                 }
