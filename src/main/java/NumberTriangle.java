@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -64,6 +65,7 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+
     }
 
 
@@ -88,8 +90,8 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
         return -1;
+
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -115,6 +117,7 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prev = null;
 
         String line = br.readLine();
         while (line != null) {
@@ -123,6 +126,35 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+            String[] numStrings = line.split(" ");
+            int[] numbers = new int[numStrings.length];
+
+            NumberTriangle[] rowNodes = new NumberTriangle[numbers.length];
+            for (int i = 0; i < numStrings.length; i++) {
+                numbers[i] = Integer.parseInt(numStrings[i]);
+            }
+
+            for (int i = 0; i < numbers.length; i++) {
+                rowNodes[i] = new NumberTriangle(numbers[i]);
+            }
+
+            if (top == null) {
+                top = rowNodes[0];
+            }
+
+
+            if (prev != null) {
+                for (int i = 0; i < prev.length; i++){
+                    if (i+1 < rowNodes.length) {
+                        prev[i].setLeft(rowNodes[i]);
+                        prev[i].setRight(rowNodes[i+1]);
+                    }
+                }
+            }
+            prev = rowNodes;
+
+
+
 
             //read the next line
             line = br.readLine();
