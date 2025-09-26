@@ -1,4 +1,7 @@
+import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +91,27 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+
+        if (path == null || path.isEmpty()) return cur.root;
+
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                if (cur.left == null) {
+                    throw new IllegalArgumentException();
+                }
+                cur = cur.left;
+            } else if (ch == 'r') {
+                if (cur.right == null) {
+                    throw new IllegalArgumentException();
+                }
+                cur = cur.right;
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,24 +132,45 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        java.util.List<NumberTriangle> prev = null;
 
         String line = br.readLine();
         while (line != null) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                // 解析当前行的所有数，创建节点
+                String[] parts = trimmed.split("\\s+");
+                List<NumberTriangle> curr = new ArrayList<>(parts.length);
+                for (String p : parts) {
+                    int val = Integer.parseInt(p);
+                    curr.add(new NumberTriangle(val));
+                }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                // 第一行的第一个节点就是 top
+                if (top == null) {
+                    top = curr.get(0);
+                }
 
-            // TODO process the line
+                // 将上一行的每个节点与当前行的两个相邻节点连接（共享子节点对象）
+                if (prev != null) {
+                    for (int i = 0; i < prev.size(); i++) {
+                        prev.get(i).setLeft(curr.get(i));
+                        prev.get(i).setRight(curr.get(i + 1));
+                    }
+                }
 
-            //read the next line
+                // 滚动到下一轮
+                prev = curr;
+            }
+
+            // 读取下一行
             line = br.readLine();
         }
         br.close();
+
         return top;
     }
 
