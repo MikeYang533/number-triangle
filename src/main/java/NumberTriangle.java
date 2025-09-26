@@ -88,8 +88,23 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+
+        // look at the length of path: if empty, return tree root, and if not,
+        // follow directions.  With each iteration, update the new tracked leaf,
+        // and return the final tracked leaf
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        int t = this.root;
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                t = this.left.root;
+            }
+            else if (path.charAt(i) == 'r') {
+                t = this.right.root;
+            }
+        }
+        return t;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -121,6 +136,7 @@ public class NumberTriangle {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
+
 
             // TODO process the line
 
