@@ -149,9 +149,7 @@ public class NumberTriangle {
                 top = currentRow.get(0);
             }
 
-            prev.clear();
             prev = currentRow;
-
 
             //read the next line
             line = br.readLine();
