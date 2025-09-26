@@ -1,4 +1,8 @@
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -110,8 +114,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
+        List<List<NumberTriangle>> list = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -119,16 +122,37 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] parts = line.trim().split("\\s+");
+            List<NumberTriangle> currentRow = new ArrayList<>();
 
-            // TODO process the line
+            for (String part : parts){
+                int value = Integer.parseInt(part);
+                NumberTriangle node = new NumberTriangle(value);
+                currentRow.add(node);
+            }
 
-            //read the next line
+            if (!list.isEmpty()){
+                List<NumberTriangle> prevRow = list.get(list.size() - 1);
+                for (int i = 0; i < currentRow.size(); i++) {
+                    NumberTriangle curr = currentRow.get(i);
+                    if (i < prevRow.size()) {
+                        prevRow.get(i).left = curr;
+                    }
+                    if (i > 0) {
+                        prevRow.get(i - 1).right = curr;
+                    }
+                }
+            } else {
+                top = currentRow.get(0);
+            }
+
+            list.add(currentRow);
             line = br.readLine();
         }
+
         br.close();
         return top;
+
     }
 
     public static void main(String[] args) throws IOException {
