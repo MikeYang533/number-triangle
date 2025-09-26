@@ -88,8 +88,28 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path == null || path.isEmpty()) {
+            System.out.println("Path: " + this.root);
+            return this.root;
+        }
+        NumberTriangle curr = this;
+        StringBuilder visited = new StringBuilder();
+        visited.append(curr.root);
+        for (char c : path.toCharArray()) {
+            if (c == 'l') {
+                if (curr.left == null) throw new IllegalStateException("No left child");
+                curr = curr.left;
+            } else if (c == 'r') {
+                if (curr.right == null) throw new IllegalStateException("No right child");
+                curr = curr.right;
+            } else {
+                throw new IllegalArgumentException("Path must contain only 'l' or 'r'");
+            }
+            visited.append(" -> ").append(curr.root);
+        }
+        System.out.println("Path: " + visited);
+        return curr.root;
+    }
     }
 
     /** Read in the NumberTriangle structure from a file.
