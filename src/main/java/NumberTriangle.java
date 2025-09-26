@@ -103,7 +103,7 @@ public class NumberTriangle {
                 currRow = currRow.right;
             }
         }
-        return currRow.root
+        return currRow.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
