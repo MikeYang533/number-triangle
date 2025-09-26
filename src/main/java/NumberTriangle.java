@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +89,6 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
         return -1;
     }
 
@@ -109,8 +109,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> previousLine = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +118,29 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            ArrayList<Integer> currentLine = new ArrayList<>();
+            for (String number : line.trim().split(" ")) {
+                currentLine.add(Integer.parseInt(number));
+            }
 
-            // TODO process the line
+            ArrayList<NumberTriangle> currentTrees = new ArrayList<>();
+
+            for (int number : currentLine) {
+                NumberTriangle tree = new NumberTriangle(number);
+                currentTrees.add(tree);
+            }
+
+            if (currentTrees.size() != 1) {
+                for (int i = 0; i < previousLine.size(); i++) {
+                    previousLine.get(i).left = currentTrees.get(i);
+                    previousLine.get(i).right = currentTrees.get(i + 1);
+                }
+
+            } else {
+                top = currentTrees.get(0);
+            }
+
+            previousLine = currentTrees;
 
             //read the next line
             line = br.readLine();
