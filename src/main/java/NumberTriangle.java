@@ -146,10 +146,10 @@ public class NumberTriangle {
                 }
                 else{
                     if(i < prevRow.size()){
-                        prevRow.get(i).setLeft(prevRow.get(i));
+                        prevRow.get(i).setLeft(currRow.get(i));
                     }
                     else{
-                        prevRow.get(i).setRight(prevRow.get(i));
+                        prevRow.get(i - 1).setRight(currRow.get(i));
                     }
                 }
             }
