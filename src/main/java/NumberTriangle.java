@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -106,27 +107,54 @@ public class NumberTriangle {
     public static NumberTriangle loadTriangle(String fname) throws IOException {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
+
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
+        // Keep track of previous row while building
+        ArrayList<NumberTriangle> prevRow = new ArrayList<>();
         String line = br.readLine();
+
         while (line != null) {
+            // Split the line into numbers
+            String[] parts = line.trim().split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // Create nodes for this row
+            for (String numStr : parts) {
+                NumberTriangle node = new NumberTriangle(Integer.parseInt(numStr));
+                currRow.add(node);
+            }
 
-            // TODO process the line
+            // Link current row to previous row
+            if (!prevRow.isEmpty()) {
+                for (int i = 0; i < currRow.size(); i++) {
+                    NumberTriangle curr = currRow.get(i);
 
-            //read the next line
+                    // link left parent (from prevRow[i-1])
+                    if (i > 0) {
+                        prevRow.get(i - 1).setRight(curr);
+                    }
+
+                    // link right parent (from prevRow[i])
+                    if (i < prevRow.size()) {
+                        prevRow.get(i).setLeft(curr);
+                    }
+                }
+            } else {
+                // First row → top node
+                top = currRow.get(0);
+            }
+
+            // Move down a row
+            prevRow = currRow;
             line = br.readLine();
         }
+
         br.close();
         return top;
     }
