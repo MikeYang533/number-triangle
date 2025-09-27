@@ -54,35 +54,26 @@ public class NumberTriangle {
     }
 
     public void maxSumPath() {
-        // optional / not for credit
     }
 
     public boolean isLeaf() {
         return right == null && left == null;
     }
 
-    /**
-     * Follow path of 'l' and 'r' and return the value at the end.
-     * Empty path returns this.root.
-     */
+
     public int retrieve(String path) {
         NumberTriangle cur = this;
         for (int i = 0; i < path.length(); i++) {
             char c = path.charAt(i);
             if (c == 'l') {
                 cur = cur.left;
-            } else { // c == 'r'
+            } else {
                 cur = cur.right;
             }
         }
         return cur.root;
     }
 
-    /**
-     * Load a NumberTriangle from a whitespace-separated file on the classpath.
-     * Lines may contain multiple spaces; blank lines are ignored.
-     * Builds the structure bottom-up so parents share children.
-     */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         if (inputStream == null) {
@@ -90,7 +81,6 @@ public class NumberTriangle {
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-        // 1) Read all rows of ints
         List<int[]> rows = new ArrayList<>();
         String line = br.readLine();
         while (line != null) {
@@ -99,7 +89,7 @@ public class NumberTriangle {
                 String[] parts = trimmed.split("\\s+");
                 int[] vals = new int[parts.length];
                 for (int i = 0; i < parts.length; i++) {
-                    vals[i] = Integer.parseInt(parts[i]); // handles leading zeros like "04"
+                    vals[i] = Integer.parseInt(parts[i]);
                 }
                 rows.add(vals);
             }
@@ -107,29 +97,28 @@ public class NumberTriangle {
         }
         br.close();
 
-        // 2) Build nodes bottom-up so each parent points to two adjacent children
-        NumberTriangle[] below = null; // row directly below current row
+
+        NumberTriangle[] below = null;
         for (int r = rows.size() - 1; r >= 0; r--) {
             int[] vals = rows.get(r);
             NumberTriangle[] current = new NumberTriangle[vals.length];
             for (int c = 0; c < vals.length; c++) {
                 NumberTriangle node = new NumberTriangle(vals[c]);
-                if (below != null) {      // not the bottom row
+                if (below != null) {
                     node.setLeft(below[c]);
                     node.setRight(below[c + 1]);
                 }
                 current[c] = node;
             }
-            below = current; // move up a row
+            below = current;
         }
 
-        // the top row is now in 'below'
         return below[0];
     }
 
     public static void main(String[] args) throws IOException {
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
-        mt.maxSumPath(); // optional
+        mt.maxSumPath(); 
         System.out.println(mt.getRoot());
     }
-}// retrieve implemented
+}
