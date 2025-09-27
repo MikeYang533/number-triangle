@@ -90,16 +90,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-//        NumberTriangle x = this;
-//        for  (int i = 0; i < path.length(); i++) {
-//            char ch = path.charAt(i);
-//            if (ch == 'l') {
-//                x = x.left;
-//            } else {
-//                x = x.right;
-//            }
-//        }
-//        return x.getRoot();
+        NumberTriangle x = this;
+        for  (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                x = x.left;
+            } else {
+                x = x.right;
+            }
+        }
+        return x.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
