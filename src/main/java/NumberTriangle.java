@@ -90,7 +90,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle curr = this;
-
+        //implemented
         for (int i = 0; i < path.length(); i++) {
             char step = path.charAt(i);
 
