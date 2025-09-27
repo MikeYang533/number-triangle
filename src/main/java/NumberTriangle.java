@@ -100,6 +100,7 @@ public class NumberTriangle {
             }
         }
         return x.getRoot();
+        
     }
 
     /** Read in the NumberTriangle structure from a file.
