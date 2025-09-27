@@ -66,6 +66,7 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+        // yes it's for credit
     }
 
 
