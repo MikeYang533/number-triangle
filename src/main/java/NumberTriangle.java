@@ -76,20 +76,32 @@ public class NumberTriangle {
      * Follow path through this NumberTriangle structure ('l' = left; 'r' = right) and
      * return the root value at the end of the path. An empty string will return
      * the root of the NumberTriangle.
-     *
+     * <p>
      * You can decide if you want to use a recursive or an iterative approach in your solution.
-     *
+     * <p>
      * You can assume that:
-     *      the length of path is less than the height of this NumberTriangle structure.
-     *      each character in the string is either 'l' or 'r'
+     * the length of path is less than the height of this NumberTriangle structure.
+     * each character in the string is either 'l' or 'r'
+     * <p>
+     * Hence return the final value followed by the trace provided
      *
      * @param path the path to follow through this NumberTriangle
-     * @return the root value at the location indicated by path
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        // TODO implement this method; Finished
+        NumberTriangle curr = this;
+
+        for (char step : path.toCharArray()) {
+            if (step == 'l') {
+                curr = curr.left;
+            } else if (step == 'r') {
+                curr = curr.right;
+            } else {
+                throw new IllegalArgumentException("Invalid character in path: " + step);
+            }
+        }
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
