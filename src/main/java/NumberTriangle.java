@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -110,8 +111,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
+        int levelNum = 0;
+        ArrayList<NumberTriangle[]> arrTriangle = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -119,21 +120,39 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            NumberTriangle[] currLevelArr = new NumberTriangle[levelNum+1];
+            String[] lineSplit = line.split(" ");
 
-            // TODO process the line
+            for(int i = 0; i < lineSplit.length; i++){
+                int rootVal = Integer.parseInt(lineSplit[i]);
+                currLevelArr[i] = new NumberTriangle(rootVal);
+            }
+
+            arrTriangle.add(currLevelArr);
+
+            for(int i = 1; i < levelNum + 1; i++){
+                NumberTriangle[] parentArr = arrTriangle.get(levelNum - 1);
+
+                for(int j = 0; j < parentArr.length; j++){
+                    NumberTriangle parentTriangle = parentArr[j];
+                    parentTriangle.setLeft(arrTriangle.get(levelNum)[j]);
+                    parentTriangle.setRight(arrTriangle.get(levelNum)[j+1]);
+                }
+            }
+
+            levelNum++;
 
             //read the next line
             line = br.readLine();
         }
+        top = arrTriangle.get(0)[0];
         br.close();
         return top;
     }
 
     public static void main(String[] args) throws IOException {
 
-        NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+        NumberTriangle mt = NumberTriangle.loadTriangle("little_tree.txt");
 
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
