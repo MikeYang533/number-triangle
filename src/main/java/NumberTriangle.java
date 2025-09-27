@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.equals("")) {
+            return this.root;
+        } else {
+            NumberTriangle next = null;
+            if (path.charAt(0) == 'l') {
+                next = this.left;
+            } else {
+                next = this.right;
+            }
+            return next.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,8 +118,8 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        NumberTriangle[] preRow = null;
+        // define variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -121,8 +130,24 @@ public class NumberTriangle {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
+            String[] nums = line.trim().split("\\s+");
+            NumberTriangle[] currRow = new NumberTriangle[nums.length];
 
-            // TODO process the line
+            for (int i = 0; i < nums.length; i++) {
+                NumberTriangle node = new NumberTriangle(Integer.parseInt(nums[i]));
+                currRow[i] = node;
+            }
+            if (top == null) {
+                top = currRow[0]; // first number is root
+            } else {
+                // connect each node with the two below it
+                for (int i = 0; i < preRow.length; i++) {
+                    preRow[i].setLeft(currRow[i]);
+                    preRow[i].setRight(currRow[i + 1]);
+                }
+            }
+            preRow = currRow;
+            // process the line
 
             //read the next line
             line = br.readLine();
@@ -130,6 +155,7 @@ public class NumberTriangle {
         br.close();
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
