@@ -132,4 +132,4 @@ public class NumberTriangle {
         mt.maxSumPath(); // optional
         System.out.println(mt.getRoot());
     }
-}
+}// retrieve implemented
