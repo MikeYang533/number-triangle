@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+//        NumberTriangle x = this;
+//        for  (int i = 0; i < path.length(); i++) {
+//            char ch = path.charAt(i);
+//            if (ch == 'l') {
+//                x = x.left;
+//            } else {
+//                x = x.right;
+//            }
+//        }
+//        return x.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -107,23 +117,38 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        // .class: get the class of the class
+        // .getClassLoader(): returns the class loader for a specific class
+        // .getResourceAsStream(String name): finds a resource with the given name and returns it as an InputStream
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> previousLevel = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
+            String[] values = line.trim().split("\\s+");
+            List<NumberTriangle> currentLevel = new ArrayList<>();
+            for (int i = 0; i < values.length; i++) {
+                NumberTriangle node = new NumberTriangle(Integer.parseInt(values[i]));
+                currentLevel.add(node);
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                if (!previousLevel.isEmpty()) {
+                    if (i > 0) {
+                        previousLevel.get(i - 1).right = node;
+                    }
+                    if (i < previousLevel.size()) {
+                        previousLevel.get(i).left = node;
+                    }
+                }
+            }
 
-            // TODO process the line
-
+            if (top == null) {
+                top = currentLevel.get(0);
+            }
+            previousLevel = currentLevel;
             //read the next line
             line = br.readLine();
         }
