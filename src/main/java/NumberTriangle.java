@@ -1,4 +1,8 @@
 import java.io.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -29,27 +33,36 @@ import java.io.*;
  */
 public class NumberTriangle {
 
+
     private int root;
+
 
     private NumberTriangle left;
     private NumberTriangle right;
 
+
     public NumberTriangle(int root) {
         this.root = root;
     }
+
 
     public void setLeft(NumberTriangle left) {
         this.left = left;
     }
 
 
+
+
     public void setRight(NumberTriangle right) {
         this.right = right;
     }
 
+
     public int getRoot() {
         return root;
     }
+
+
 
 
     /**
@@ -64,12 +77,29 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+        if (!isLeaf()) {
+            if (left != null) left.maxSumPath();
+            if (right != null) right.maxSumPath();
+
+
+            int leftSum = (left != null) ? left.getRoot() : 0;
+            int rightSum = (right != null) ? right.getRoot() : 0;
+
+
+            this.root += Math.max(leftSum, rightSum);
+            this.left = null;
+            this.right = null;
+        }
     }
+
+
 
 
     public boolean isLeaf() {
         return right == null && left == null;
     }
+
+
 
 
     /**
@@ -88,9 +118,27 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+
+
+        for (int i = 0; i < path.length(); i++) {
+            char direction = path.charAt(i);
+            if (direction == 'l') {
+                current = current.left;
+            } else if (direction == 'r') {
+                current = current.right;
+            }
+
+
+            if (current == null) {
+                throw new IllegalArgumentException("Invalid path: path goes beyond triangle structure");
+            }
+        }
+
+
+        return current.getRoot();
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -110,30 +158,55 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+
+
+        List<NumberTriangle> prevRow = null;
+
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
+
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
-            // TODO process the line
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                List<NumberTriangle> currRow = new ArrayList<>(parts.length);
+                for (String p : parts) {
+                    currRow.add(new NumberTriangle(Integer.parseInt(p)));
+                }
 
-            //read the next line
+
+                if (prevRow == null) {
+                    // first row
+                    top = currRow.get(0);
+                } else {
+                    // wire parents to children, sharing middle nodes
+                    for (int i = 0; i < prevRow.size(); i++) {
+                        prevRow.get(i).setLeft(currRow.get(i));
+                        prevRow.get(i).setRight(currRow.get(i + 1));
+                    }
+                }
+
+
+                prevRow = currRow;
+            }
             line = br.readLine();
         }
         br.close();
         return top;
     }
 
+
     public static void main(String[] args) throws IOException {
 
+
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+
 
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
@@ -142,3 +215,4 @@ public class NumberTriangle {
         System.out.println(mt.getRoot());
     }
 }
+
