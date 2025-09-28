@@ -65,7 +65,22 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
+        int res = maxSumHelper(this);
+        this.root = res;
+        this.right = this.left = null;
     }
+
+    private int maxSumHelper(NumberTriangle nt) {
+
+        if(nt.isLeaf())
+            return nt.root;
+
+        int leftSum = maxSumHelper(nt.left);
+        int rightSum = maxSumHelper(nt.right);
+
+        return nt.root + Math.max(leftSum, rightSum);
+    } // maxSumHelper
+
 
     public boolean isLeaf() {
         return right == null && left == null;
