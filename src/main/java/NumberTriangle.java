@@ -92,10 +92,10 @@ public static class NumberTriangle {
             return this.root; // base case: return root value
         }
 
-        char first = path.charAt(0);
+        char one = path.charAt(0);
         String rest = path.substring(1);
 
-        if (first == 'l') {
+        if (one == 'l') {
             return this.left.retrieve(rest);
         } else {
             return this.right.retrieve(rest);
