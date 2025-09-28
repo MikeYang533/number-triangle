@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -63,9 +65,7 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
     }
-
 
     public boolean isLeaf() {
         return right == null && left == null;
@@ -88,9 +88,9 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        return 0;
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -109,12 +109,12 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        List<NumberTriangle> parents = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+
 
         String line = br.readLine();
         while (line != null) {
@@ -122,8 +122,26 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            List<NumberTriangle> children = new ArrayList<>();
+            String[] parts = line.split(" ");
 
+            for (String part : parts) {
+                children.add(new NumberTriangle(Integer.parseInt(part)));
+            }
+
+            if (parents.isEmpty()){
+                top = children.get(0);
+            }
+            else if (!children.isEmpty()) {
+                int i = 0;
+                for (NumberTriangle parent : parents) {
+                    parent.left = children.get(i);
+                    i++;
+                    parent.right = children.get(i);
+                } // for each
+            } // if
+
+            parents = children;
             //read the next line
             line = br.readLine();
         }
