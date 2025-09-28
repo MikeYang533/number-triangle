@@ -1,4 +1,8 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -110,7 +114,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        boolean isFirstLine = true;
+        List<NumberTriangle> previousLayer = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,7 +127,40 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            if (isFirstLine) {
+                NumberTriangle node = new NumberTriangle(Integer.parseInt(line));
+                top = node;
+                previousLayer.add(node);
+                isFirstLine = false;
+                line = br.readLine();
+                continue;
+            }
+
+            List<Integer> currentLine = Arrays
+                    .stream(line.split(" "))
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+
+            NumberTriangle prevRight = null;
+            List<NumberTriangle> currentLayer = new ArrayList<>();
+
+            for (int i = 0; i < previousLayer.size(); i++) {
+                NumberTriangle leftNode;
+                if (prevRight == null) {
+                    leftNode = new NumberTriangle(currentLine.get(0));
+                    currentLayer.add(leftNode);
+                }
+                else {
+                    leftNode = prevRight;
+                }
+                NumberTriangle rightNode = new NumberTriangle(currentLine.get(i+1));
+                currentLayer.add(rightNode);
+                prevRight = rightNode;
+                previousLayer.get(i).setLeft(leftNode);
+                previousLayer.get(i).setRight(rightNode);
+            }
+
+            previousLayer = currentLayer;
 
             //read the next line
             line = br.readLine();
