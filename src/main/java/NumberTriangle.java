@@ -67,7 +67,6 @@ public class NumberTriangle {
     public void maxSumPath() {
     }
 
-
     public boolean isLeaf() {
         return right == null && left == null;
     }
