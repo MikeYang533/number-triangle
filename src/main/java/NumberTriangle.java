@@ -89,7 +89,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         if (path.isEmpty()) {
-            return getRoot();
+            return this.getRoot();
         }else if (path.charAt(0) == 'l') {
             String newPath = path.substring(1);
             this.left.retrieve(newPath);
@@ -97,7 +97,7 @@ public class NumberTriangle {
             String newPath = path.substring(1);
             this.right.retrieve(newPath);
         }
-        return getRoot();
+        return this.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
