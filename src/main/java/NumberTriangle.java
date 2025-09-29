@@ -101,7 +101,7 @@ public class NumberTriangle {
             return right.retrieve(rest);
         }
         else {
-            throw new IllegalArgumentException("Invalid path");
+            throw new IllegalArgumentException("Invalid path!");
         }
     }
 
