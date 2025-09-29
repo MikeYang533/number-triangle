@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.FileSystemNotFoundException;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,27 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+
+        if (path.isEmpty()){
+            return this.root;
+        }
+
+       return retrieve(path, this, 0);
+    }
+
+    public int retrieve(String path, NumberTriangle root, int curr){
+
+        if (curr == path.length()){
+            return root.root;
+        }
+
+        if (path.charAt(curr) == 'l'){
+            return retrieve(path, root.left, curr + 1);
+        }
+
+        else{
+            return retrieve(path, root.right, curr + 1);
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
