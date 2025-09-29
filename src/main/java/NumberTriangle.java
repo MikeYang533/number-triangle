@@ -121,7 +121,7 @@ public static class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        ArrayList<List<NumberTriangle>> rows = new ArrayList<>();
+        ArrayList<NumberTriangle> rows = new ArrayList<>();
 
         NumberTriangle top = null;
 
