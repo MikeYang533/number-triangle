@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -27,7 +28,7 @@ import java.io.*;
  *        code still compiles and runs so that we can run the tests on your code.
  *
  */
-public static class NumberTriangle {
+public class NumberTriangle {
 
     private int root;
 
@@ -101,7 +102,7 @@ public static class NumberTriangle {
             return this.right.retrieve(rest);
         }
     }
-}
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -121,7 +122,7 @@ public static class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        ArrayList<List<NumberTriangle>> rows = new ArrayList<>();
+        ArrayList<ArrayList<NumberTriangle>> rows = new ArrayList<>();
 
         NumberTriangle top = null;
 
@@ -142,8 +143,8 @@ public static class NumberTriangle {
         br.close();
 
         for (int i = 0; i < rows.size() - 1; i++) {
-            List<NumberTriangle> currentRow = rows.get(i);
-            List<NumberTriangle> nextRow = rows.get(i + 1);
+            ArrayList<NumberTriangle> currentRow = rows.get(i);
+            ArrayList<NumberTriangle> nextRow = rows.get(i + 1);
 
             for (int j = 0; j < currentRow.size(); j++) {
                 NumberTriangle parent = currentRow.get(j);
@@ -160,12 +161,13 @@ public static class NumberTriangle {
 
     public static void main(String[] args) throws IOException {
     // If your file is on the classpath under resources/, use this:
-    NumberTriangle mt = NumberTriangle.loadTriangle("resources/input_tree.txt");
+    // NumberTriangle mt = NumberTriangle.loadTriangle("resources/input_tree.txt");
     // If it’s just in the working directory, use:
-    // NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+    NumberTriangle mt = loadTriangle("input_tree.txt");
 
     mt.maxSumPath(); // optional
     System.out.println(mt.getRoot());}
+}
 
 
 
