@@ -118,7 +118,6 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
         NumberTriangle[] prev = new NumberTriangle[1];
         NumberTriangle[] current;
 
