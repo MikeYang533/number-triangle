@@ -89,23 +89,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        NumberTriangle retrieveTree = new NumberTriangle(root);
+        NumberTriangle curr = this;
 
         for (int i = 0; i < path.length(); i++){
-            if (retrieveTree.isLeaf()){
-                return root;
+            char ch = path.charAt(i);
+            if (ch == 'l'){
+                curr = curr.left;
             }
-            if (path.charAt(i) == 'l'){
-                retrieveTree = retrieveTree.left;
-            }
-            if (path.charAt(i) == 'r'){
-                retrieveTree = retrieveTree.right;
+            if (ch == 'r'){
+                curr = curr.right;
             }
         }
 
 
-        return -1;
+        return curr.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
