@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (int i = 0; i < path.length(); i++) {
+            char letter = path.charAt(i);
+            if (letter == 'l') {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return current.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,11 +119,15 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> queue = new ArrayList<NumberTriangle>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        String top_line = br.readLine().trim();
+        int top_number = Integer.parseInt(top_line);
+        top = new NumberTriangle(top_number);
+        queue.add(top);
 
         String line = br.readLine();
         while (line != null) {
@@ -122,7 +135,17 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String [] line_array = line.trim().split(" ");
+            for (int i = 0; i < (line_array.length - 1); i++) {
+                NumberTriangle cur_triangle = queue.remove(0);
+                NumberTriangle cur_left = new NumberTriangle(Integer.parseInt(line_array[i]));
+                NumberTriangle cur_right = new NumberTriangle(Integer.parseInt(line_array[i + 1]));
+                cur_triangle.setLeft(cur_left);
+                cur_triangle.setRight(cur_right);
+                queue.add(cur_left);
+            }
+            NumberTriangle last = new NumberTriangle(Integer.parseInt(line_array[line_array.length - 1]));
+            queue.add(last);
 
             //read the next line
             line = br.readLine();
