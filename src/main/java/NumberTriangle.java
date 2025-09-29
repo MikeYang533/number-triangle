@@ -91,6 +91,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         NumberTriangle current = this;
+
         for (char step : path.toCharArray()) {
             if (step == 'l') {
                 current = current.left;
