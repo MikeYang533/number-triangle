@@ -143,10 +143,10 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) {
+            throw new IOException("Could not find resource: " + fname);
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
