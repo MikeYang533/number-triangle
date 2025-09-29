@@ -91,6 +91,7 @@ public class NumberTriangle {
         NumberTriangle cur = this;
         for  (char c :  path.toCharArray())
             cur = (c == 'l') ? cur.left : cur.right;
+
         return cur.getRoot();
     }
 
