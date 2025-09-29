@@ -107,27 +107,54 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader br;
+        if (inputStream == null) {
+            // Fallback to reading from file system
+            br = new BufferedReader(new FileReader("src/main/resources/" + fname));
+        } else {
+            br = new BufferedReader(new InputStreamReader(inputStream));
+        }
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
+        // Store all lines to process them in order
+        java.util.List<String> lines = new java.util.ArrayList<>();
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
+            lines.add(line);
             line = br.readLine();
         }
         br.close();
+
+        if (lines.isEmpty()) {
+            return null;
+        }
+
+        // Parse the first line to get the root
+        String[] firstLineNumbers = lines.get(0).trim().split("\\s+");
+        NumberTriangle top = new NumberTriangle(Integer.parseInt(firstLineNumbers[0]));
+
+        // Process each subsequent line
+        java.util.List<NumberTriangle> previousRow = new java.util.ArrayList<>();
+        previousRow.add(top);
+
+        for (int i = 1; i < lines.size(); i++) {
+            String[] numbers = lines.get(i).trim().split("\\s+");
+            java.util.List<NumberTriangle> currentRow = new java.util.ArrayList<>();
+
+            // Create nodes for this row
+            for (String number : numbers) {
+                currentRow.add(new NumberTriangle(Integer.parseInt(number)));
+            }
+
+            // Connect nodes from previous row to current row
+            for (int j = 0; j < previousRow.size(); j++) {
+                NumberTriangle parent = previousRow.get(j);
+                parent.setLeft(currentRow.get(j));
+                parent.setRight(currentRow.get(j + 1));
+            }
+
+            previousRow = currentRow;
+        }
+
         return top;
     }
 
