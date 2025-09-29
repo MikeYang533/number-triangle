@@ -168,6 +168,7 @@ public class NumberTriangle {
         }
         br.close();
         return top;
+        // changes to make pull request
     }
 
     public static void main(String[] args) throws IOException {
