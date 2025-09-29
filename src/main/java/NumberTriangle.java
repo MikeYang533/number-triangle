@@ -68,6 +68,7 @@ public class NumberTriangle {
 
 
     public boolean isLeaf() {
+
         return right == null && left == null;
     }
 
@@ -89,6 +90,21 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
+        NumberTriangle retrieveTree = new NumberTriangle(root);
+
+        for (int i = 0; i < path.length(); i++){
+            if (retrieveTree.isLeaf()){
+                return root;
+            }
+            if (path.charAt(i) == 'l'){
+                retrieveTree = retrieveTree.left;
+            }
+            if (path.charAt(i) == 'r'){
+                retrieveTree = retrieveTree.right;
+            }
+        }
+
+
         return -1;
     }
 
