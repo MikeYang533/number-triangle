@@ -91,8 +91,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                if (cur.left == null) throw new IndexOutOfBoundsException("path too deep at i=" + i);
+                cur = cur.left;
+            } else if (ch == 'r') {
+                if (cur.right == null) throw new IndexOutOfBoundsException("path too deep at i=" + i);
+                cur = cur.right;
+            } else {
+                throw new IllegalArgumentException("invalid char: " + ch);
+            }
+        }
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
