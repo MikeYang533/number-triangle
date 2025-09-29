@@ -133,7 +133,7 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-//            System.out.println(line);
+            // System.out.println(line);
             String[] nums = line.trim().split("\\s+");
             List<Integer> row = new ArrayList<>();
             for (String n : nums) {
