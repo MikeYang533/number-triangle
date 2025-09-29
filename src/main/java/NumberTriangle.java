@@ -145,9 +145,6 @@ public class NumberTriangle {
 
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
             String[] arr = line.split(" ");
 
             if (arr.length == 1) {
@@ -161,8 +158,8 @@ public class NumberTriangle {
                 }
 
                 for (int i = 0; i < now.size() - 1; i++) {
-                    prev.get(i).left = now.get(i);
                     prev.get(i).right = now.get(i + 1);
+                    prev.get(i).left = now.get(i);
                 }
 
                 prev.clear();
