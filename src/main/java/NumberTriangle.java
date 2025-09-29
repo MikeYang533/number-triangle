@@ -136,10 +136,10 @@ public class NumberTriangle {
             System.out.println(line);
 
             String [] line_array = line.trim().split(" ");
-            for (int i = 0; i < (line_array.length - 1); i++) {
+            for (int j = 0; j < (line_array.length - 1); j++) {
                 NumberTriangle cur_triangle = queue.remove(0);
-                NumberTriangle cur_left = new NumberTriangle(Integer.parseInt(line_array[i]));
-                NumberTriangle cur_right = new NumberTriangle(Integer.parseInt(line_array[i + 1]));
+                NumberTriangle cur_left = new NumberTriangle(Integer.parseInt(line_array[j]));
+                NumberTriangle cur_right = new NumberTriangle(Integer.parseInt(line_array[j + 1]));
                 cur_triangle.setLeft(cur_left);
                 cur_triangle.setRight(cur_right);
                 queue.add(cur_left);
