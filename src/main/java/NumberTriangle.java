@@ -76,9 +76,9 @@ public class NumberTriangle {
      * Follow path through this NumberTriangle structure ('l' = left; 'r' = right) and
      * return the root value at the end of the path. An empty string will return
      * the root of the NumberTriangle.
-     *
+
      * You can decide if you want to use a recursive or an iterative approach in your solution.
-     *
+
      * You can assume that:
      *      the length of path is less than the height of this NumberTriangle structure.
      *      each character in the string is either 'l' or 'r'
@@ -88,15 +88,25 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.getRoot();
+        }
+        else if (path.startsWith("l")) {
+            return this.left.getRoot();
+        }
+        else if (path.startsWith("r")) {
+            return this.right.getRoot();
+        }
+        else {
+            return this.getRoot() + this.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
-     *
+
      * You may assume that it is a valid format with a height of at least 1,
      * so there is at least one line with a number on it to start the file.
-     *
+
      * See resources/input_tree.txt for an example NumberTriangle format.
      *
      * @param fname the file to load the NumberTriangle structure from
