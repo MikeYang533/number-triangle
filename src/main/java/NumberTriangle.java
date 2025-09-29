@@ -1,5 +1,5 @@
 import java.io.*;
-
+import java.util.*;
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
  *
@@ -88,8 +88,10 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for  (char c :  path.toCharArray())
+            cur = (c == 'l') ? cur.left : cur.right;
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -108,27 +110,32 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
-        String line = br.readLine();
-        while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+        List<int[]> rows = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] nums = line.split(" ");
+            int[] arr = new int[nums.length];
+            for (int i = 0; i < nums.length; i++) arr[i] = Integer.parseInt(nums[i]);
+            rows.add(arr);
         }
         br.close();
-        return top;
+
+        // Build from bottom up
+        List<NumberTriangle> prev = new ArrayList<>();
+        for (int i = rows.size() - 1; i >= 0; i--) {
+            int[] vals = rows.get(i);
+            List<NumberTriangle> curr = new ArrayList<>();
+            for (int j = 0; j < vals.length; j++) {
+                NumberTriangle node = new NumberTriangle(vals[j]);
+                if (!prev.isEmpty()) {
+                    node.setLeft(prev.get(j));
+                    node.setRight(prev.get(j + 1));
+                }
+                curr.add(node);
+            }
+            prev = curr;
+        }
+        return prev.get(0);
     }
 
     public static void main(String[] args) throws IOException {
