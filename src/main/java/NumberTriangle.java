@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return getRoot();
+        }
+        String action = path.charAt(0) + "";
+        String rest = path.substring(1);
+        if (action.equals("l")) {
+            return left.retrieve(rest);
+        }
+        else if (action.equals("r")) {
+            return right.retrieve(rest);
+        }
+        else {
+            throw new IllegalArgumentException("Invalid path!");
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -108,25 +121,33 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
         String line = br.readLine();
+        NumberTriangle top = null;
+        ArrayList<NumberTriangle> prevRow = new ArrayList<>();
+
+
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] numList = line.split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
 
-            // TODO process the line
+            for (String num : numList) {
+                currRow.add(new NumberTriangle(Integer.parseInt(num)));
 
-            //read the next line
+            }
+            if (top == null) {
+                top = currRow.get(0);
+            }
+            if (!prevRow.isEmpty()) {
+                for (int i = 0; i < prevRow.size(); i++) {
+                    prevRow.get(i).setLeft(currRow.get(i));
+                    prevRow.get(i).setRight(currRow.get(i+1));
+                }
+            }
             line = br.readLine();
+            prevRow = currRow;
         }
+
         br.close();
         return top;
     }
