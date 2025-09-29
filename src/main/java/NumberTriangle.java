@@ -111,7 +111,7 @@ public class NumberTriangle {
      *
      * See resources/input_tree.txt for an example NumberTriangle format.
      *
-     * @param fname the file to load the NumberTriangle structure from
+     * @param fname the file to load the NumberTriangle structure fromeee
      * @return the topmost NumberTriangle object in the NumberTriangle structure read from the specified file
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
