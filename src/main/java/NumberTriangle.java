@@ -1,5 +1,6 @@
 import java.io.*;
-
+import java.util.List;
+import java.util.ArrayList;
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
  *
@@ -88,8 +89,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle c = this;
+        if (path == null || path.isEmpty()) {
+            return c.getRoot();
+        }
+        for (int i = 0; i < path.length(); i++) {
+            char pathChar = path.charAt(i);
+            if (pathChar == 'l'){
+                c = c.left;
+            }
+            else {
+                c = c.right;
+            }
+        }
+        return c.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -108,9 +121,8 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        List<NumberTriangle> prevRow = null;
 
-
-        // TODO define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +131,27 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
-            // TODO process the line
+            String[] parts = line.split("\\s+");
+            List<NumberTriangle> currRow = new ArrayList<>(parts.length);
+            for (String p : parts) {
+                currRow.add(new NumberTriangle(Integer.parseInt(p)));
+            }
+
+            if (top == null) {
+                top = currRow.get(0);
+            }
+
+            if (prevRow != null) {
+                // Link parents in prevRow to children in currRow.
+                // For each k, prev[k].left -> curr[k], prev[k].right -> curr[k+1]
+                for (int k = 0; k < prevRow.size(); k++) {
+                    prevRow.get(k).setLeft(currRow.get(k));
+                    prevRow.get(k).setRight(currRow.get(k + 1));
+                }
+            }
+
+            prevRow = currRow;
 
             //read the next line
             line = br.readLine();
