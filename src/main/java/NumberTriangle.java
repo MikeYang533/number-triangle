@@ -163,6 +163,8 @@ public class NumberTriangle {
         return top;
     }
 
+
+    // I accidentally did both retrieve and loadTriangle in one issue bro...
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
