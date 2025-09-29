@@ -127,10 +127,10 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
-
+            line = line.trim();
             // remove when done; this line is included so running starter code prints the contents of the file
             if (!line.isEmpty()){
-                String[] pieces = line.split("");
+                String[] pieces = line.split(" ");
                 java.util.List <NumberTriangle> current_row = new java.util.ArrayList<>(pieces.length);
                 for (String p: pieces) {
                     current_row.add(new NumberTriangle(Integer.parseInt(p)));
