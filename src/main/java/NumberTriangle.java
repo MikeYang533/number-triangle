@@ -88,8 +88,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+             if (path.charAt(i) == 'l') {
+                cur = cur.left;
+            }
+            else if (path.charAt(i) == 'r') {
+                cur = cur.right;
+            }
+        }
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -111,6 +119,8 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        NumberTriangle[] prev = new NumberTriangle[1];
+        NumberTriangle[] current;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -122,10 +132,33 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] token =  line.split(" ");
+            // Base Case: top
+            if (token.length == 1) {
+                top = new NumberTriangle(Integer.parseInt(token[0]));
+                prev[0] = top;
+            }
+            else {
+                // connect parents to current line
+                current = new NumberTriangle[token.length];
+                for (int i = 0; i < token.length - 1; i++) {
+                    // left child
+                    NumberTriangle left =  new NumberTriangle(Integer.parseInt(token[i]));
+                    prev[i].setLeft(left);
+                    current[i] = left;
+
+                    // right child
+                    NumberTriangle right = new NumberTriangle(Integer.parseInt(token[i+1]));
+                    prev[i].setRight(right);
+                    current[i+1] = right;
+                }
+                // Save current line as prev
+                prev = current;
+            }
 
             //read the next line
             line = br.readLine();
+
         }
         br.close();
         return top;
