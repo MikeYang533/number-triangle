@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Objects;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +89,18 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        if (path.isEmpty()) {
+            return root;
+        }
+
+        char first_char = path.charAt(0);
+        String remain = path.substring(1);
+
+        if (first_char == ('l')) {
+            return left.retrieve(remain);
+        } else if (first_char == 'r') {
+            return right.retrieve(remain);
+        }
         return -1;
     }
 
