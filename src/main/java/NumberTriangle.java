@@ -89,8 +89,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle now = this;
+
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+
+            if (c == 'l'){
+                now = now.left;
+            }
+            else if (c == 'r'){
+                now = now.right;
+            }
+        }
+        return now.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
