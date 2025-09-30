@@ -1,4 +1,5 @@
 import java.io.*;
+import java.security.KeyStore;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -57,13 +58,26 @@ public class NumberTriangle {
      * Set the root of this NumberTriangle to be the max path sum
      * of this NumberTriangle, as defined in Project Euler problem 18.
      * After this method is called, this NumberTriangle should be a leaf.
-     *
+     * <p>
      * Hint: think recursively and use the idea of partial tracing from first year :)
-     *
+     * <p>
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        if (isLeaf()) {
+            return;
+        }
+        if (left != null) {
+            left.maxSumPath();
+        }
+        if (right != null) {
+            right.maxSumPath();
+        }
+        int leftSum = (left != null) ? left.root : 0;
+        int rightSum = (right != null) ? right.root : 0;
+        root = root + Math.max(leftSum, rightSum);
+        left = null;
+        right = null;
     }
 
 
@@ -76,20 +90,32 @@ public class NumberTriangle {
      * Follow path through this NumberTriangle structure ('l' = left; 'r' = right) and
      * return the root value at the end of the path. An empty string will return
      * the root of the NumberTriangle.
-     *
+     * <p>
      * You can decide if you want to use a recursive or an iterative approach in your solution.
-     *
+     * <p>
      * You can assume that:
-     *      the length of path is less than the height of this NumberTriangle structure.
-     *      each character in the string is either 'l' or 'r'
+     * the length of path is less than the height of this NumberTriangle structure.
+     * each character in the string is either 'l' or 'r'
      *
      * @param path the path to follow through this NumberTriangle
      * @return the root value at the location indicated by path
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (this.isLeaf() || path.isEmpty()) {
+            return this.root;
+        }
+        else {
+            char ch = path.charAt(0);
+            String remain = path.substring(1);
+            if (ch == 'l' && this.left != null) {
+                return this.left.retrieve(remain);
+            } else if (ch == 'r' && this.right != null) {
+                return this.right.retrieve(remain);
+            } else {
+                return -1;
+            }
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
