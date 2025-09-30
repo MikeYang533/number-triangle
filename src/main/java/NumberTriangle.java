@@ -140,7 +140,6 @@ public class NumberTriangle {
                     previous.get(i).setRight(current.get(i + 1));
                 }
             }
-
             row.add(current);
             line = br.readLine();
         }
