@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,9 +90,18 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        StringBuilder builderPath = new StringBuilder(path);
+        if (builderPath.length() == 0) {
+            return root;
+        } else {
+            if (builderPath.charAt(0) == 'l') {
+                return left.retrieve(builderPath.substring(1));
+            } else  {
+                return right.retrieve(builderPath.substring(1));
+            }
+        }
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -108,24 +119,62 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        // comment NEW COMMENT
 
-
-        // TODO define any variables that you want to use to store things
-
+        ArrayList<NumberTriangle> lineNumbers = new ArrayList<NumberTriangle>();
+        ArrayList<NumberTriangle> lineNumbers2 = new ArrayList<NumberTriangle>();
+        NumberTriangle top = null;
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = null;
 
         String line = br.readLine();
+
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] checkLine = line.split(" ");
+            if (checkLine.length == 1) {
+                top = new NumberTriangle(Integer.parseInt(line));
+                line = br.readLine();
 
-            // TODO process the line
+                if (line != null) {
+                    String[] splitLine = line.split(" ");
 
-            //read the next line
+                    for (String num : splitLine) {
+                        lineNumbers.add(new NumberTriangle(Integer.parseInt(num)));
+                    }
+
+                    top.setLeft(lineNumbers.get(0));
+                    top.setRight(lineNumbers.get(1));
+                }
+
+                line = br.readLine();
+
+            }
+
+            if (line != null) {
+                String[] splittedLine = line.split(" ");
+                for (String num: splittedLine) {
+                    lineNumbers2.add(new NumberTriangle(Integer.parseInt(num)));
+                }
+
+
+                for (int i = 0; i < lineNumbers.size(); i++) {
+                    lineNumbers.get(i).setLeft(lineNumbers2.get(i));
+                    lineNumbers.get(i).setRight(lineNumbers2.get(i + 1));
+                }
+
+            }
+
+//            lineNumbers = lineNumbers2 without aliasing:
+            lineNumbers.clear();
+            for (NumberTriangle numtriobj: lineNumbers2) {
+                lineNumbers.add(numtriobj);
+            }
+
+            lineNumbers2.clear();
+
             line = br.readLine();
+
         }
         br.close();
         return top;
@@ -134,11 +183,17 @@ public class NumberTriangle {
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
-
+//
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
         // Problem 18 from project Euler [not for credit]
         mt.maxSumPath();
         System.out.println(mt.getRoot());
+
+        // my own test for loadTriangle. should give 1 2 3 4 5 5 6
+//        System.out.println(mt.root + ", " + mt.left.root + ", " + mt.right.root + ", " + mt.left.left.root + ", " + mt.left.right.root + ", " + mt.right.left.root + ", " + mt.right.right.root);
+
+//        System.out.println(mt.retrieve("rrrrrrrrllrrrl")); // 53
+//        System.out.println(mt.retrieve(""));
     }
 }
