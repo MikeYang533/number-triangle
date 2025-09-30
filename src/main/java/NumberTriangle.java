@@ -122,9 +122,9 @@ public class NumberTriangle {
 
         List<List<NumberTriangle>> rows = new ArrayList<>();
 
-        String line = br.readLine();
-        while (line != null) {
-            String[] parts = line.trim().split("\\s+");
+        String l = br.readLine();
+        while (l != null) {
+            String[] parts = l.trim().split("\\s+");
             List<NumberTriangle> row = new ArrayList<>();
             for (String p : parts) {
                 row.add(new NumberTriangle(Integer.parseInt(p)));
@@ -132,7 +132,7 @@ public class NumberTriangle {
             rows.add(row);
 
             //read the next line
-            line = br.readLine();
+            l = br.readLine();
         }
         br.close();
 
