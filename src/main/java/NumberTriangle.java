@@ -2,6 +2,7 @@ import com.sun.source.tree.NewArrayTree;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -125,7 +126,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-        //TODO: initialize variables to store thing
+        List<List<NumberTriangle>> rows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -133,13 +134,32 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
-            System.out.println(line);
+            String[] nums = line.split(" ");
+            List<NumberTriangle> row = new ArrayList<>();
+            for (String num : nums) {
+                row.add(new NumberTriangle(Integer.parseInt(num)));
+            }
+            rows.add(row);
             //read the next line
             line = br.readLine();
         }
+        top = rows.get(0).get(0);
+        for (int i = 1; i < rows.size() - 1; i++) {
+            List<NumberTriangle> current = rows.get(i);
+            List<NumberTriangle> next = rows.get(i + 1);
+            for (int j = 0; j < current.size() - 1; j++) {
+                current.get(j).left = next.get(j);
+                current.get(j).right = next.get(j + 1);
+
+            }
+        }
+        top.left = rows.get(1).get(0);
+        top.right = rows.get(1).get(1);
+
         br.close();
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
