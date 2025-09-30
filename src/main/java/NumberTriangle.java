@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -89,7 +90,20 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        if (path == null)
+            return root;
+        else {
+            NumberTriangle value = this;
+            for (char c : path.toCharArray()) {
+                if (c == 'r')
+                    value = value.right;
+                else
+                    value = value.left;
+
+            }
+            return value.root;
+        }
+
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -117,12 +131,29 @@ public class NumberTriangle {
         NumberTriangle top = null;
 
         String line = br.readLine();
+        ArrayList<NumberTriangle> previous = new ArrayList<>();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] nums = line.trim().split("\\s+");
+            ArrayList<NumberTriangle> current_line = new ArrayList<>();
+
 
             // TODO process the line
+            for (String num : nums) {
+                current_line.add(new NumberTriangle(Integer.parseInt(num)));
+            }
+
+            for (int i = 0; i < previous.size(); i++) {
+                NumberTriangle parent = previous.get(i);
+                parent.left = current_line.get(i);
+                parent.right = current_line.get(i + 1);
+            }
+
+            if (top == null) {
+                top = current_line.get(0);
+            }
+            previous = current_line;
 
             //read the next line
             line = br.readLine();
