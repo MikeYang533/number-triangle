@@ -149,13 +149,13 @@ public class NumberTriangle {
             List<NumberTriangle> current = rows.get(i);
             List<NumberTriangle> next = rows.get(i + 1);
             for (int j = 0; j < current.size() - 1; j++) {
-                current.get(j).left = next.get(j);
-                current.get(j).right = next.get(j + 1);
+                current.get(j).setLeft(next.get(j));
+                current.get(j).setRight(next.get(j + 1));
 
             }
         }
-        top.left = rows.get(1).get(0);
-        top.right = rows.get(1).get(1);
+        top.setLeft(rows.get(1).get(0));
+        top.setRight(rows.get(1).get(1));
 
         br.close();
         return top;
