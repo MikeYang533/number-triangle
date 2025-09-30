@@ -89,7 +89,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        return 0;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -111,24 +111,105 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
+            String[] lst = line.split(" ");
 
             // TODO process the line
+            if(lst.length == 1) {
+                top = new NumberTriangle((Integer.parseInt(lst[0])));
+                top.setLeft(null);
+                top.setRight(null);
+            } else if(lst.length == 2) {
+                top.left = new NumberTriangle(Integer.parseInt(lst[0]));
+                top.right = new NumberTriangle(Integer.parseInt(lst[1]));
+                top.left.setLeft(null);
+                top.left.setRight(null);
+                top.right.setLeft(null);
+                top.right.setRight(null);
+            } else {
+                for(int i = 0; i < lst.length; i++) {
+                    if(i == 0){
+                        findparent(lcreator(i, lst.length - 1), top).left = new NumberTriangle(Integer.parseInt(lst[i]));
+                    } else if (i == lst.length - 1) {
+                        findparent(rcreator(i, lst.length - 1), top).right = new NumberTriangle(Integer.parseInt(lst[i]));
+                    } else{
+                        findparent(lcreator(i, lst.length - 1), top).right = new NumberTriangle(Integer.parseInt(lst[i]));
+                        findparent(rcreator(i, lst.length - 1), top).left = findparent(lcreator(i, lst.length - 1), top).right;
+                    }
+
+                }
+            }
 
             //read the next line
             line = br.readLine();
         }
         br.close();
         return top;
+    }
+
+    private static String lcreator(int num, int len){
+        StringBuilder s =  new StringBuilder();
+        if(num == 0){
+            for(int i = 1; i < num + 1; i++){
+                s.append('r');
+            }
+            for(int j = 1; j < len - num - 1; j++){
+                s.append('l');
+            }
+            s.append('l');
+            return s.toString();
+        }
+        for(int i = 1; i < num; i++){
+            s.append('r');
+        }
+        for(int j = 1; j < len - num; j++){
+            s.append('l');
+        }
+        s.append('l');
+        return s.toString();
+    }
+
+    private static String rcreator(int num, int len){
+        StringBuilder s =  new StringBuilder();
+        if (num == len){
+            for(int i = 1; i < num - 1; i++){
+                s.append('r');
+            }
+            for(int j = 1; j < len - num + 1; j++){
+                s.append('l');
+            }
+            s.append('r');
+            return s.toString();
+        }
+        for(int i = 1; i < num; i++){
+            s.append('r');
+        }
+        for(int j = 1; j < len - num; j++){
+            s.append('l');
+        }
+        s.append('r');
+        return s.toString();
+    }
+
+    private static NumberTriangle findparent(String path, NumberTriangle top) {
+        NumberTriangle n1 = top;
+        for(int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                n1 = n1.left;
+            }  else {
+                n1 = n1.right;
+            }
+        }
+        return n1;
     }
 
     public static void main(String[] args) throws IOException {
