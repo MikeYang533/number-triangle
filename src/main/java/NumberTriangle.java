@@ -138,6 +138,7 @@ public class NumberTriangle {
         while (line != null) {
             String[] numbers = line.split("\\s+");
             List<NumberTriangle> currRow = new ArrayList<>();
+
             for (String s : numbers) {
                 if (!s.trim().isEmpty()) {
                     currRow.add(new NumberTriangle(Integer.parseInt(s.trim())));
