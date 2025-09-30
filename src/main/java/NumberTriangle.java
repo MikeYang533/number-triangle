@@ -142,6 +142,7 @@ public class NumberTriangle {
                 if (!s.trim().isEmpty()) {
                     currRow.add(new NumberTriangle(Integer.parseInt(s.trim())));
                 }
+
             }
             for (int i = 0; i < prevRow.size(); i++) {
                 NumberTriangle parent = prevRow.get(i);
