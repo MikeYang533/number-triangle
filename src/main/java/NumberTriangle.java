@@ -88,7 +88,20 @@ public class NumberTriangle {
      * @return the root value at the location indicated by path
      *
      */
+    public int retrieve(String path) {
+        if (path.isEmpty()) {
+            return this.root; // base case: return root value
+        }
 
+        char one = path.charAt(0);
+        String rest = path.substring(1);
+
+        if (one == 'l') {
+            return this.left.retrieve(rest);
+        } else {
+            return this.right.retrieve(rest);
+        }
+    }
 
 
     /** Read in the NumberTriangle structure from a file.
