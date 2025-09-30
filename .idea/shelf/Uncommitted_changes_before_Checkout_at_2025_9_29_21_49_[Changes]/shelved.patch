@@ -1,0 +1,17 @@
+Index: .idea/checkstyle-idea.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CheckStyle-IDEA\" serialisationVersion=\"2\">\n    <checkstyleVersion>11.0.1</checkstyleVersion>\n    <scanScope>JavaOnly</scanScope>\n    <option name=\"locations\">\n      <list>\n        <ConfigurationLocation id=\"bundled-sun-checks\" type=\"BUNDLED\" scope=\"All\" description=\"Sun Checks\">(bundled)</ConfigurationLocation>\n        <ConfigurationLocation id=\"bundled-google-checks\" type=\"BUNDLED\" scope=\"All\" description=\"Google Checks\">(bundled)</ConfigurationLocation>\n      </list>\n    </option>\n  </component>\n</project>
+===================================================================
+diff --git a/.idea/checkstyle-idea.xml b/.idea/checkstyle-idea.xml
+--- a/.idea/checkstyle-idea.xml	(revision 5e6649ae6240c30c3075b086ee0500b9c94d89e6)
++++ b/.idea/checkstyle-idea.xml	(date 1759196503052)
+@@ -3,6 +3,8 @@
+   <component name="CheckStyle-IDEA" serialisationVersion="2">
+     <checkstyleVersion>11.0.1</checkstyleVersion>
+     <scanScope>JavaOnly</scanScope>
++    <option name="thirdPartyClasspath" />
++    <option name="activeLocationIds" />
+     <option name="locations">
+       <list>
+         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
