@@ -93,20 +93,21 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
 
-        NumberTriangle curr = null;
-        for (int i = 0; i < path.length(); i++) {
-            if (path.charAt(i) == 'l' ){
-                curr = this.left;
-            }
-            else if (path.charAt(i) == 'r' ){
-                curr = this.right;
-            }
-        }
-        if (curr != null) {
-            return curr.getRoot();
+        NumberTriangle curr = this;
+        if (path.isEmpty()){
+            return this.getRoot();
         }
 
-        return -1;
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l' ){
+                curr = curr.left;
+            }
+            else if (path.charAt(i) == 'r' ){
+                curr = curr.right;
+            }
+        }
+
+        return curr.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
