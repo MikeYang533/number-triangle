@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -27,7 +28,7 @@ import java.io.*;
  *        code still compiles and runs so that we can run the tests on your code.
  *
  */
-public static class NumberTriangle {
+public class NumberTriangle {
 
     private int root;
 
@@ -87,21 +88,8 @@ public static class NumberTriangle {
      * @return the root value at the location indicated by path
      *
      */
-    public int retrieve(String path) {
-        if (path.isEmpty()) {
-            return this.root; // base case: return root value
-        }
 
-        char one = path.charAt(0);
-        String rest = path.substring(1);
 
-        if (one == 'l') {
-            return this.left.retrieve(rest);
-        } else {
-            return this.right.retrieve(rest);
-        }
-    }
-}
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -110,7 +98,7 @@ public static class NumberTriangle {
      *
      * See resources/input_tree.txt for an example NumberTriangle format.
      *
-     * @param fname the file to load the NumberTriangle structure from
+     * @param fname the file to load the NumberTriangle structure fromeee
      * @return the topmost NumberTriangle object in the NumberTriangle structure read from the specified file
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
@@ -121,7 +109,7 @@ public static class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        ArrayList<List<NumberTriangle>> rows = new ArrayList<>();
+        ArrayList<ArrayList<NumberTriangle>> rows = new ArrayList<>();
 
         NumberTriangle top = null;
 
@@ -142,8 +130,8 @@ public static class NumberTriangle {
         br.close();
 
         for (int i = 0; i < rows.size() - 1; i++) {
-            List<NumberTriangle> currentRow = rows.get(i);
-            List<NumberTriangle> nextRow = rows.get(i + 1);
+            ArrayList<NumberTriangle> currentRow = rows.get(i);
+            ArrayList<NumberTriangle> nextRow = rows.get(i + 1);
 
             for (int j = 0; j < currentRow.size(); j++) {
                 NumberTriangle parent = currentRow.get(j);
@@ -159,13 +147,11 @@ public static class NumberTriangle {
     }
 
     public static void main(String[] args) throws IOException {
-    // If your file is on the classpath under resources/, use this:
-    NumberTriangle mt = NumberTriangle.loadTriangle("resources/input_tree.txt");
-    // If it’s just in the working directory, use:
-    // NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+        // If your file is on the classpath under resources/, use this:
+        // NumberTriangle mt = NumberTriangle.loadTriangle("resources/input_tree.txt");
+        // If it’s just in the working directory, use:
+        NumberTriangle mt = loadTriangle("input_tree.txt");
 
-    mt.maxSumPath(); // optional
-    System.out.println(mt.getRoot());}
-
-
-
+        mt.maxSumPath(); // optional
+        System.out.println(mt.getRoot());}
+}
