@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -111,6 +113,8 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        List<List<Integer>> rows = new ArrayList<>();
+        List<List<NumberTriangle>> numberTriangleRows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -123,11 +127,34 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+            List<Integer> row = new ArrayList<>();
+            String[] currentRow = line.split(" ");
+            for (String number: currentRow) {
+                row.add(Integer.parseInt(number));
+            }
+            rows.add(row);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
+
+        for (List<Integer> integers : rows) {
+            List<NumberTriangle> numberTriangleRow = new ArrayList<>();
+            for (Integer integer : integers) {
+                numberTriangleRow.add(new NumberTriangle(integer));
+            }
+            numberTriangleRows.add(numberTriangleRow);
+        }
+
+        for (int i = 0; i < numberTriangleRows.size() - 1; i++) {
+            for (int j = 0; j < numberTriangleRows.get(i).size(); j++) {
+                numberTriangleRows.get(i).get(j).setLeft(numberTriangleRows.get(i + 1).get(j));
+                numberTriangleRows.get(i).get(j).setRight(numberTriangleRows.get(i + 1).get(j + 1));
+            }
+        }
+
+        top = numberTriangleRows.get(0).get(0);
         return top;
     }
 
