@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.nio.file.FileSystemNotFoundException;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -93,8 +94,7 @@ public class NumberTriangle {
         if (path.isEmpty()){
             return this.root;
         }
-
-        return retrieve(path, this, 0);
+       return retrieve(path, this, 0);
     }
 
     public int retrieve(String path, NumberTriangle root, int curr){
