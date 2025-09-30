@@ -89,6 +89,8 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
+        // Retrieve method
+
         NumberTriangle current = this;
 
         for (char c : path.toCharArray()) {
