@@ -97,9 +97,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-
-        return -1;
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+            char dir = path.charAt(i);
+            if (dir == 'l') {
+                cur = cur.left;
+            }
+            else if (dir == 'r') {
+                cur = cur.right;
+            }
+        }
+        return cur.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -126,7 +134,6 @@ public class NumberTriangle {
         // so might want a variable for that.
         NumberTriangle[] prevRow = null;
         NumberTriangle top = null;
-        int topRootValue = top.getRoot();
 
 
         String line = br.readLine();
@@ -150,7 +157,6 @@ public class NumberTriangle {
                         NumberTriangle curRoot = prevRow[i];
                         curRoot.setLeft(curRow[i]);
                         curRoot.setRight(curRow[i+1]);
-
                     }
                 }
                 prevRow = curRow;
