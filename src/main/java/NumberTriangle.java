@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -111,22 +112,75 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> triangles = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
+
         String line = br.readLine();
+
+
+        int root_val = Integer.parseInt(line);
+        top = new NumberTriangle(root_val);
+        // System.out.println(top.left);
+        triangles.add(top);
+        // read the first line, creat top num traingle and add it to list
+        // to populate its branches later
+        line = br.readLine();
+
+
         while (line != null) {
+            String[] list_line = line.split(" ");
+            ArrayList<NumberTriangle> copyTriangles = new ArrayList<>(triangles);
+            // Create a shallow copy snapshot of Traingles for each new line
+            for (int i = 0; i < copyTriangles.size();i++) {
+                NumberTriangle curr_triangle = copyTriangles.get(i);
+                int first_root = Integer.parseInt(list_line[i]);
+                int sec_root = Integer.parseInt(list_line[i+1]);
+
+
+                NumberTriangle first_child = new NumberTriangle(first_root);
+                NumberTriangle second_child = new NumberTriangle(sec_root);
+
+
+                if(curr_triangle.left == null) {
+                    curr_triangle.setLeft(first_child);
+                    curr_triangle.setRight(second_child);
+                    triangles.add(first_child);
+                    triangles.add(second_child);
+                    // Add left and right child triangles to p1
+                    // Add both left and right to Triangles Queue
+
+
+                }
+                else if(curr_triangle.right == null && curr_triangle.left != null) {
+                    curr_triangle.setRight(second_child);
+                    triangles.add(second_child);
+                    //Add only right triangle b/c left has been added already when we appended to p1 (we are now on p2, anything more than p1)
+                    //Left child has already been added to Triangles Queue
+                }
+                if(i < copyTriangles.size()-1){
+                    //If we have a traingle.next
+                    NumberTriangle next_triangle = copyTriangles.get(i+1);
+                    next_triangle.setLeft(second_child);
+                    // We are gauranteed to have already added left and right to the Traingles Queue
+
+                }
+                //Might accidently be adding the first triangle twice -> once when add P1's right and then P2's left
+
+                triangles.remove(0);
+
+            }
+            line = br.readLine();
+
+            }
+
+
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
-        }
+            // DONE process the line
         br.close();
         return top;
     }
