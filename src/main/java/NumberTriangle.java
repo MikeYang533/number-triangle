@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -89,22 +91,19 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
 
-        // look at the length of path: if empty, return tree root, and if not,
-        // follow directions.  With each iteration, update the new tracked leaf,
-        // and return the final tracked leaf
+        NumberTriangle t = this;
         if (path.isEmpty()) {
-            return this.root;
+            return t.root;
         }
-        int t = this.root;
         for (int i = 0; i < path.length(); i++) {
             if (path.charAt(i) == 'l') {
-                t = this.left.root;
+                t = t.left;
             }
             else if (path.charAt(i) == 'r') {
-                t = this.right.root;
+                t = t.right;
             }
         }
-        return t;
+        return t.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -123,38 +122,76 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<List> triangles = new ArrayList<>();
+        List<NumberTriangle> prev = null;
+        List<NumberTriangle> cur = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+
+        String[] string = line.split(" ");
+        ArrayList<NumberTriangle> l = new ArrayList<>();
+        NumberTriangle n = new NumberTriangle(Integer.parseInt(string[0]));
+        l.add(n);
+        triangles.add(l);
+        top = n;
+        //read the next line
+        line = br.readLine();
+
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-
-            // TODO process the line
-
+            String[] s = line.split(" ");
+            ArrayList<NumberTriangle> list = new ArrayList<>();
+            for (String str : s) {
+                list.add(new NumberTriangle(Integer.parseInt(str)));
+            }
+            triangles.add(list);
             //read the next line
             line = br.readLine();
         }
         br.close();
-        return top;
+
+        for (int i = 0; i < triangles.size() - 1; i++) {
+            prev = triangles.get(i);
+            cur = triangles.get(i + 1);
+
+            for (int j = 0; j < cur.size(); j++) {
+                if (j == 0) {
+                    prev.get(0).setLeft(cur.get(0));
+                }
+                else if (j == cur.size() - 1) {
+                    prev.get(j - 1).setRight(cur.get(j));
+                }
+                else {
+                    prev.get(j - 1).setRight(cur.get(j));
+                    prev.get(j).setLeft(cur.get(j));
+                }
+            }
+        }
+            return top;
+        }
+
+        // instantiate an array of lists (each list represents one text line)
+        // read through file, create a tree for each letter and place it in its line's list
+        // iterate through each list, track a prev and a cur list
+        // for each tree in cur list, check if it's the first or last
+        // if first, make it the left tree of the prev list's tree at index 0
+        // if last, make it the right tree of the prev list's tree at index i - 1
+        // else, make it the right tree of the prev list's tree at index i - 1,
+        // and the left tree of the prev list's tree at index i
+        // make top point to the first (top) node
+        // return top
+
+        public static void main (String[]args) throws IOException {
+
+            NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+
+            // [not for credit]
+            // you can implement NumberTriangle's maxPathSum method if you want to try to solve
+            // Problem 18 from project Euler [not for credit]
+            mt.maxSumPath();
+            System.out.println(mt.getRoot());
+        }
     }
-
-    public static void main(String[] args) throws IOException {
-
-        NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
-
-        // [not for credit]
-        // you can implement NumberTriangle's maxPathSum method if you want to try to solve
-        // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
-        System.out.println(mt.getRoot());
-    }
-}
