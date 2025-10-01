@@ -35,19 +35,23 @@ public class NumberTriangle {
     private NumberTriangle right;
 
     public NumberTriangle(int root) {
+
         this.root = root;
     }
 
     public void setLeft(NumberTriangle left) {
+
         this.left = left;
     }
 
 
     public void setRight(NumberTriangle right) {
+
         this.right = right;
     }
 
     public int getRoot() {
+
         return root;
     }
 
@@ -68,6 +72,7 @@ public class NumberTriangle {
 
 
     public boolean isLeaf() {
+
         return right == null && left == null;
     }
 
@@ -89,6 +94,7 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
+
         return -1;
     }
 
