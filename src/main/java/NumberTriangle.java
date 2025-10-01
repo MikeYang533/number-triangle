@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+            if (c == 'l') {
+                cur = cur.left;
+            } else { // c == 'r'
+                cur = cur.right;
+            }
+        }
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,25 +120,45 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        // define any variables that you want to use to store things
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<int[]> rows = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
+            line = line.trim();
+            if (!line.isEmpty()) {
+                String[] parts = line.split("\\s+");
+                int[] nums = new int[parts.length];
+                for (int i = 0; i < parts.length; i++) {
+                    nums[i] = Integer.parseInt(parts[i]); // handles leading zeros like "04"
+                }
+                rows.add(nums);
+            }
             //read the next line
             line = br.readLine();
         }
         br.close();
-        return top;
+        List<NumberTriangle> nextLevel = null; // children level
+        for (int r = rows.size() - 1; r >= 0; r--) {
+            int[] levelVals = rows.get(r);
+            List<NumberTriangle> thisLevel = new ArrayList<>(levelVals.length);
+            for (int i = 0; i < levelVals.length; i++) {
+                NumberTriangle node = new NumberTriangle(levelVals[i]);
+                thisLevel.add(node);
+                if (nextLevel != null) {
+                    // link to shared children
+                    node.setLeft(nextLevel.get(i));
+                    node.setRight(nextLevel.get(i + 1));
+                }
+            }
+            nextLevel = thisLevel;
+        }
+
+        return nextLevel.get(0); //return
     }
 
     public static void main(String[] args) throws IOException {
