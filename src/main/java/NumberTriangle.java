@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        char dir = path.charAt(0);
+        if (dir == 'l' && this.left != null) {
+            return this.left.retrieve(path.substring(1));
+        } else if (dir == 'r' && this.right != null) {
+            return this.right.retrieve(path.substring(1));
+        } else {
+            throw new IllegalArgumentException("Invalid path: " + path);
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -115,6 +125,7 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> prevRow = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
@@ -123,7 +134,21 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+            String[] nums = line.trim().split("\\s+");
+            List<NumberTriangle> currRow = new ArrayList<>();
+            for (String n : nums) {
+                currRow.add(new NumberTriangle(Integer.parseInt(n)));
+            }
 
+            if (top == null) {
+                top = currRow.get(0);
+            } else {
+                for (int i = 0; i < prevRow.size(); i++) {
+                    prevRow.get(i).setLeft(currRow.get(i));
+                    prevRow.get(i).setRight(currRow.get(i + 1));
+                }
+            }
+            prevRow = currRow;
             //read the next line
             line = br.readLine();
         }
