@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +90,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        if(path.isEmpty()){
+            return root;
+        }
+        char first = path.charAt(0);
+        String remainPath = path.substring(1);
+        if(first == 'r'){
+            return this.left.retrieve(remainPath);
+        }
+        if(first == 'l'){
+            return this.right.retrieve(remainPath);
+        }
         return -1;
     }
 
@@ -110,8 +122,7 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
+        List<NumberTriangle> preRow = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -122,7 +133,26 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] numStrs = line.trim().split("\\s+");
+            List<NumberTriangle> currentRow = new ArrayList<>();
+            for (String s : numStrs) {
+                currentRow.add(new NumberTriangle(Integer.parseInt(s)));
+            }
+            if (preRow.isEmpty()) {
+                top = currentRow.get(0);
+            } else {
+                for (int i = 0; i < currentRow.size(); i++) {
+                    NumberTriangle curr = currentRow.get(i);
+                    if (i > 0) {
+                        preRow.get(i - 1).setRight(curr);
+                    }
+                    if (i < preRow.size()) {
+                        preRow.get(i).setLeft(curr);
+                    }
+                }
+            }
+            preRow = currentRow;
+
 
             //read the next line
             line = br.readLine();
