@@ -42,7 +42,6 @@ public class NumberTriangle {
         this.left = left;
     }
 
-
     public void setRight(NumberTriangle right) {
         this.right = right;
     }
@@ -138,7 +137,8 @@ public class NumberTriangle {
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
         // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
+        mt.setLeft(new NumberTriangle(0));
+        mt.setRight(new NumberTriangle(1));
         System.out.println(mt.getRoot());
     }
 }
