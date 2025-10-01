@@ -27,7 +27,6 @@ import java.io.*;
  *        code still compiles and runs so that we can run the tests on your code.
  *
  */
-
 public class NumberTriangle {
 
     private int root;
@@ -89,9 +88,8 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        if (path.isEmpty()) return this.root;
-        else if (path.charAt(0) == 'l') return this.left.retrieve(path.substring(1));
-        else return this.right.retrieve(path.substring(1));
+        // TODO implement this method
+        return -1;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -105,30 +103,59 @@ public class NumberTriangle {
      * @return the topmost NumberTriangle object in the NumberTriangle structure read from the specified file
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
-    public static NumberTriangle loadTriangle(String fname) throws IOException {
+    public NumberTriangle loadTriangle(String fname) throws IOException {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
+        NumberTriangle current_top = null;
+
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-        NumberTriangle top = new NumberTriangle(Integer.parseInt(br.readLine()));
-
-        NumberTriangle[] prev_line = new NumberTriangle[1];
-        prev_line[0] = top;
+        NumberTriangle top = null;
 
         String line = br.readLine();
+        String[] numbers = line.split(" ");
+        int counter = 0;
         while (line != null) {
-            String[] split_line =  line.split(" ");
-            NumberTriangle[] current_line = new NumberTriangle[split_line.length];
-            for(int i = 0; i < split_line.length; i++) current_line[i] = new NumberTriangle(Integer.parseInt(split_line[i]));
+            counter = counter + 1;
 
-            for(int i = 0; i < prev_line.length; i++) {
-                prev_line[i].setLeft(current_line[i]);
-                prev_line[i].setRight(current_line[i+1]);
+            // remove when done; this line is included so running starter code prints the contents of the file
+            System.out.println(line);
+
+            for (int i = 0; i < numbers.length; i++) {
+                int current_num = Integer.parseInt(numbers[i]);
+
+                boolean placed = false;
+                while (placed == false) {
+                    if (top == null) {
+                        top = new NumberTriangle(current_num);
+                        current_top = top;
+                        placed = true;
+                    }
+                    else {
+                        if (this.left == null) {
+                            setLeft(new NumberTriangle(current_num));
+                            placed = true;
+                        }
+                        else if (this.right == null) {
+                            setRight(new NumberTriangle(current_num));
+                            placed = true;
+                        }
+                    }
+                }
+
+
+
+
+                    else if (this.left.isLeaf()) {
+
+                    }
+                }
             }
-            prev_line = current_line;
+
+            // TODO process the line
 
             //read the next line
             line = br.readLine();
