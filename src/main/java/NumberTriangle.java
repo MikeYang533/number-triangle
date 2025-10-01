@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (char c : path.toCharArray()) {
+            if (c == 'l') {
+                current = current.left;
+            } else if (c == 'r') {
+                current = current.right;
+            } else {
+                throw new IllegalArgumentException("Invalid path character: " + c);
+            }
+        }
+        return current.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,24 +119,35 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        java.util.ArrayList<java.util.ArrayList<NumberTriangle>> rows = new java.util.ArrayList<>();
 
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] nums = line.trim().split("\\s+");
+            java.util.ArrayList<NumberTriangle> row = new java.util.ArrayList<>();
+            for (String num : nums) {
+                row.add(new NumberTriangle(Integer.parseInt(num)));
+            }
+            rows.add(row);
 
-            //read the next line
             line = br.readLine();
         }
         br.close();
+
+        for (int i = 0; i < rows.size() - 1; i++) {
+            java.util.ArrayList<NumberTriangle> cur = rows.get(i);
+            java.util.ArrayList<NumberTriangle> next = rows.get(i + 1);
+            for (int j = 0; j < cur.size(); j++) {
+                cur.get(j).setLeft(next.get(j));
+                cur.get(j).setRight(next.get(j + 1));
+            }
+        }
+
+        top = rows.get(0).get(0);
         return top;
     }
 
