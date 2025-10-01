@@ -143,7 +143,24 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
-
+            if (!line.isEmpty()) {
+                String[] values = line.split(" ");
+                NumberTriangle[] curRow = new NumberTriangle[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    curRow[i] = new NumberTriangle(Integer.parseInt(values[i]));
+                }
+                if (top == null && curRow.length > 0) {
+                    top = curRow[0];
+                }
+                if (prevRow != null) {
+                    for (int i = 0; i < prevRow.length; i++) {
+                        NumberTriangle curRoot = prevRow[i];
+                        curRoot.setLeft(curRow[i]);
+                        curRoot.setRight(curRow[i+1]);
+                    }
+                }
+                prevRow = curRow;
+            }
 
             //read the next line
             line = br.readLine();
