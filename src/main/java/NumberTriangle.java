@@ -131,7 +131,6 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
-            // TODO process the line
             String[] parts = line.trim().split("\\s+");
             List<NumberTriangle> row = new ArrayList<>();
             for (String p : parts) {
