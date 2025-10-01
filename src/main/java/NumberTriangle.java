@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;  // 'this' is the root you start from
+
+        for (char c : path.toCharArray()) {
+            if (c == 'l') {
+                current = current.left;
+            } else if (c == 'r') {
+                current = current.right;
+            } else {
+                throw new IllegalArgumentException("Invalid path character: " + c);
+            }
+        }
+
+        return current.root;  // return the value at the final node
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,26 +122,33 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
+        List<List<NumberTriangle>> rows = new ArrayList<>();
         String line = br.readLine();
+
+        // Read each line and create NumberTriangle objects
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
+            String[] parts = line.trim().split("\\s+");
+            List<NumberTriangle> currentRow = new ArrayList<>();
+            for (String part : parts) {
+                currentRow.add(new NumberTriangle(Integer.parseInt(part)));
+            }
+            rows.add(currentRow);
             line = br.readLine();
         }
         br.close();
-        return top;
+
+        // Link the nodes: each node points to left and right child
+        for (int r = 0; r < rows.size() - 1; r++) {
+            List<NumberTriangle> row = rows.get(r);
+            List<NumberTriangle> nextRow = rows.get(r + 1);
+            for (int i = 0; i < row.size(); i++) {
+                row.get(i).setLeft(nextRow.get(i));
+                row.get(i).setRight(nextRow.get(i + 1));
+            }
+        }
+
+        // Return the top node (root of the triangle)
+        return rows.isEmpty() ? null : rows.get(0).get(0);
     }
 
     public static void main(String[] args) throws IOException {
