@@ -158,7 +158,7 @@ public class NumberTriangle {
             nextLevel = thisLevel;
         }
 
-        return nextLevel.get(0);
+        return nextLevel.get(0); //return
     }
 
     public static void main(String[] args) throws IOException {
