@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -33,6 +35,7 @@ public class NumberTriangle {
 
     private NumberTriangle left;
     private NumberTriangle right;
+    private int best;
 
     public NumberTriangle(int root) {
         this.root = root;
@@ -63,7 +66,19 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        System.out.println(maxSumPathHelper());
+    }
+
+    public int maxSumPathHelper(){
+        if (this.best!=0){
+            return this.best;
+        }
+        if (this.isLeaf()){
+            return this.root;
+        }
+        int newBest = this.root+Math.max(this.left.maxSumPathHelper(), this.right.maxSumPathHelper());
+        this.best = newBest;
+        return this.best;
     }
 
 
@@ -88,8 +103,11 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle curr = this;
+        for (char c:path.toCharArray()){
+            curr = (c=='l' ? curr.left  : curr.right);
+        }
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -115,15 +133,35 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
-
+        List<NumberTriangle> currentLayer = new ArrayList<>();
+        currentLayer.add(null);
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
-
-            // TODO process the line
-
+            String[] strs = line.split(" ");
+            NumberTriangle last = null;
+            List<NumberTriangle> layer = new ArrayList<>();
+            if(strs.length == 1){
+                top = new NumberTriangle(Integer.parseInt(strs[0]));
+                layer.add(top);
+            }
+            else {
+                for (int i = 0; i < strs.length; i++) {
+                    int num = Integer.parseInt(strs[i]);
+                    NumberTriangle node = new NumberTriangle(num);
+                    if (last != null) {
+                        last.setRight(node);
+                    }
+                    if (i<strs.length-1) {
+                        last = currentLayer.get(i);
+                        last.setLeft(node);
+                    }
+                    layer.add(node);
+                }
+            }
+            currentLayer = layer;
             //read the next line
             line = br.readLine();
         }
