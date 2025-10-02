@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,8 +111,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        List<NumberTriangle> previousRowNodes = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +120,43 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] tokens = line.trim().split("\\s+");
+            List<NumberTriangle> currentRowNodes = new ArrayList<>();
 
-            // TODO process the line
+            // 1. Create the NumberTriangle objects for current row
+            for (String token : tokens) {
+                if (token.isEmpty()) continue;
+                try {
+                    int value = Integer.parseInt(token);
+                    currentRowNodes.add(new NumberTriangle(value));
+                } catch (NumberFormatException e) {
+                    // Assuming valid format as per prompt, but this handles parsing errors
+                    throw new IOException("Invalid number format in file: " + token, e);
+                }
+            }
+
+            if (!currentRowNodes.isEmpty()) {
+
+                // Set the overall top node if this is the first row
+                if (top == null) {
+                    top = currentRowNodes.get(0);
+                }
+
+                // 2. Link the nodes from the PREVIOUS row to the nodes in the CURRENT row
+                // Node at index 'i' in previous row links to nodes at 'i' (left) and 'i+1' (right) in current row.
+                for (int i = 0; i < previousRowNodes.size(); i++) {
+                    NumberTriangle parent = previousRowNodes.get(i);
+
+                    // Left child is the node at the same index 'i' in the current row
+                    parent.setLeft(currentRowNodes.get(i));
+
+                    // Right child is the node at the next index 'i+1' in the current row
+                    parent.setRight(currentRowNodes.get(i + 1));
+                }
+
+                // 3. Update the previousRowNodes list for the next iteration
+                previousRowNodes = currentRowNodes;
+            }
 
             //read the next line
             line = br.readLine();
