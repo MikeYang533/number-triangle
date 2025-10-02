@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,9 +90,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (char c : path.toCharArray()) {
+            if (c == 'l') {
+                current = current.left;
+            } else if (c == 'r') {
+                current = current.right;
+            }
+        }
+        return current.root;
+
+
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
@@ -115,21 +127,32 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<List<NumberTriangle>> levels = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
+            String[] parts = line.trim().split("\\s+");
+            List<NumberTriangle> row = new ArrayList<>();
+            for (String p : parts) {
+                row.add(new NumberTriangle(Integer.parseInt(p)));
+            }
+            if (levels.size() > 0) {
+                List<NumberTriangle> prev = levels.get(levels.size() - 1);
+                for (int i = 0; i < prev.size(); i++) {
+                    prev.get(i).setLeft(row.get(i));
+                    prev.get(i).setRight(row.get(i + 1));
+                }
+            }
+            levels.add(row);
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
-            // TODO process the line
-
-            //read the next line
             line = br.readLine();
         }
         br.close();
-        return top;
+        return levels.get(0).get(0);
     }
+
+
 
     public static void main(String[] args) throws IOException {
 
