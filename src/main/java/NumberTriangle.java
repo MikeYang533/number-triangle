@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -63,7 +64,29 @@ public class NumberTriangle {
      * Note: a NumberTriangle contains at least one value.
      */
     public void maxSumPath() {
-        // for fun [not for credit]:
+        int maxSum = this.getMaxSum();
+        this.root = maxSum;
+        this.setLeft(null);
+        this.setRight(null);
+    }
+
+    private int getMaxSum() {
+        int maxSum;
+        int leftSum = 0;
+        int rightSum = 0;
+        if (this.left != null) {
+            leftSum = this.left.getMaxSum();
+        }
+        if (this.right != null) {
+            rightSum = this.right.getMaxSum();
+        }
+        if (leftSum > rightSum) {
+            maxSum = this.getRoot() + leftSum;
+        }
+        else {
+            maxSum = this.getRoot() + rightSum;
+        }
+        return maxSum;
     }
 
 
@@ -88,8 +111,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle currNode = this;
+        for  (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == 'l') {
+                currNode = currNode.left;
+            }
+            if (path.charAt(i) == 'r') {
+                currNode = currNode.right;
+            }
+        }
+        return currNode.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,8 +140,9 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        NumberTriangle[] prevNodes = null;
+        String[] numRow;
+        boolean firstLine = true;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,10 +151,29 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            numRow = line.split(" ");
 
-            // TODO process the line
+            if (firstLine) {
+                top = new NumberTriangle(Integer.parseInt(numRow[0]));
+                firstLine = false;
+                prevNodes = new NumberTriangle[1];
+                prevNodes[0] = top;
+            }
+            else {
+                NumberTriangle[] currNodes = new NumberTriangle[numRow.length];
+                NumberTriangle lastTriangle = null;
+                for (int i = 0; i < numRow.length - 1; i++) {
+                    NumberTriangle parent = prevNodes[i];
+                    NumberTriangle left = new NumberTriangle(Integer.parseInt(numRow[i]));
+                    NumberTriangle right = new NumberTriangle(Integer.parseInt(numRow[i + 1]));
+                    currNodes[i] = left;
+                    parent.setLeft(left);
+                    parent.setRight(right);
+                    lastTriangle = right;
+                }
+                currNodes[numRow.length - 1] = lastTriangle;
+                prevNodes = Arrays.copyOf(currNodes, currNodes.length + 1);
+            }
 
             //read the next line
             line = br.readLine();
