@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.*;
+
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -104,31 +106,48 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) {
+            throw new FileNotFoundException("Resource not found: " + fname);
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
+        List<int[]> rows = new ArrayList<>();
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                String[] parts = trimmed.split("\\s+");
+                int[] arr = new int[parts.length];
+                for (int i = 0; i < parts.length; i++) {
+                    arr[i] = Integer.parseInt(parts[i]);
+                }
+                rows.add(arr);
+            }
             line = br.readLine();
         }
         br.close();
-        return top;
+
+        if (rows.isEmpty()) {
+            throw new IOException("Empty triangle in file: " + fname);
+        }
+
+        NumberTriangle[] nextRow = null;
+        for (int i = rows.size() - 1; i >= 0; i--) {
+            int[] vals = rows.get(i);
+            NumberTriangle[] curRow = new NumberTriangle[vals.length];
+            for (int j = 0; j < vals.length; j++) {
+                NumberTriangle node = new NumberTriangle(vals[j]);
+                if (nextRow != null) {
+                    node.setLeft(nextRow[j]);
+                    node.setRight(nextRow[j + 1]);
+                }
+                curRow[j] = node;
+            }
+            nextRow = curRow;
+        }
+
+        return nextRow[0];
     }
 
     public static void main(String[] args) throws IOException {
