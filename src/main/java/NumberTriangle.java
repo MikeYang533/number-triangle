@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -89,6 +90,19 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
+        NumberTriangle curr = this; // we say this node is curr :)
+        for (int i = 0; i < path.length(); i++) {
+            // loop for the number of instructions in the path
+            char ch = path.charAt(i);
+            if (ch=='l'){
+                curr = curr.left;
+                return curr.root;
+            }
+            else {
+                curr = curr.right;
+                return curr.root;
+            }
+        }
         return -1;
     }
 
@@ -115,14 +129,40 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> prevRow = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
+            if (!line.isEmpty()) {
+                String[] parts = line.split(" ");
+                List<NumberTriangle> currRow = new ArrayList<>(parts.length);
+                for (String p:  parts) {
+                    currRow.add(new NumberTriangle(Integer.parseInt(p)));
+                }
+
+                // Set the top, if it is the first row
+                if (top == null && !currRow.isEmpty()){
+                    top = currRow.get(0); // get the 0th element
+                }
+
+                //Assign parents from prevRow to children in currRow
+                for (int i = 0; i < prevRow.size(); i++) {
+                    NumberTriangle parent = prevRow.get(i);
+                    parent.setLeft(currRow.get(i));
+                    parent.setRight(currRow.get(i+1));
+                }
+
+                //go look at the next row
+                prevRow = currRow;
+
+
+            }
 
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
             // TODO process the line
+
 
             //read the next line
             line = br.readLine();
