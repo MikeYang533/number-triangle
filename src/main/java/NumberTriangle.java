@@ -89,22 +89,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        NumberTriangle curr = this; // we say this node is curr :)
+        NumberTriangle curr = this; // start at the root
         for (int i = 0; i < path.length(); i++) {
-            // loop for the number of instructions in the path
             char ch = path.charAt(i);
-            if (ch=='l'){
-                curr = curr.left;
-                return curr.root;
-            }
-            else {
-                curr = curr.right;
-                return curr.root;
-            }
+            // by spec, ch is 'l' or 'r'
+            curr = (ch == 'l') ? curr.left : curr.right;
         }
-        return -1;
+        // if path is "", we never moved, so this returns the root
+        return curr.root;
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
