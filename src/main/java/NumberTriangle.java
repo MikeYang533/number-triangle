@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -64,6 +65,19 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+        // base case: this is a leave
+        if (left == null && right == null) {return;}
+        // recursive for both children
+        if (this.left != null){this.left.maxSumPath();}
+        if (this.right != null){this.right.maxSumPath();}
+        // get the left and right sum
+        int left_sum = (this.left != null) ? this.left.getRoot(): 0;
+        int right_sum = (this.right != null) ? this.right.getRoot(): 0;
+        // update this root value
+        this.root = this.root + Math.max(left_sum, right_sum);
+        // make this root a leave
+        this.left =  null;
+        this.right = null;
     }
 
 
@@ -109,21 +123,57 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
+        ArrayList<NumberTriangle> previousRows = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+        // loop over the file
         while (line != null) {
+            // creat a list to store each value for the current line
+            String[] parts = line.trim().split("\\s+ ");
+            // creat an arraylist of NumberTriangle for the current line
+            ArrayList<NumberTriangle> currentRow = new ArrayList<>();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // loop over the current line
+            for (int i = 0; i < parts.length; i++) {
+                // make the value in the line to NumberTriangle
+                int value = Integer.parseInt(parts[i]);
+                NumberTriangle node = new NumberTriangle(value);
 
-            // TODO process the line
-
+                // case: the current line is the first line, store the node as top
+                if (previousRows.isEmpty()) {
+                    top = node;
+                }
+                // case: the current line is not the first line
+                else {
+                    // subcase: the current value(type NumberTriangle) is the first value in the line
+                    if (i == 0) {
+                        // set the current NumberTriangle as
+                        // the left child of the first NumberTriangle of the previousRow
+                        previousRows.get(i).setLeft(node);
+                    }
+                    // subcase: the current NumberTriangle is the leftmost value of the current line
+                    if (i == parts.length - 1) {
+                        // set the current NUmberTriangle as
+                        // the right child of the last NumberTriangle in the previousRow
+                        previousRows.get(i).setRight(node);
+                    }
+                    // subcase: the current NumberTriangle is not the first or the last in the line,
+                    // thus has two parents
+                    else{
+                        // set it as the left child and right child to
+                        // the corresponding NumberTriangle from the previousRow
+                        previousRows.get(i).setLeft(node);
+                        previousRows.get(i-1).setRight(node);
+                    }
+                }
+                // add the current NumberTriangle to the currentRow
+                currentRow.add(node);
+            }
+            // refresh previousRows when the loop over current line is done.
+            previousRows =  currentRow;
             //read the next line
             line = br.readLine();
         }
