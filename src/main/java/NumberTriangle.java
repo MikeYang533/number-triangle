@@ -102,8 +102,20 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        //start from the current NumberTriangle
+        NumberTriangle current = this;
+        // return the root of the NumberTriangle if an empty string
+        if(path.isEmpty()){return current.getRoot();}
+        // return the root value at the indicated location
+        for (char c : path.toCharArray()) {
+            if (c == 'l'){
+                current = current.left;
+            }
+            if (c == 'r'){
+                current = current.right;
+            }
+        }
+        return current.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -132,7 +144,7 @@ public class NumberTriangle {
         // loop over the file
         while (line != null) {
             // creat a list to store each value for the current line
-            String[] parts = line.trim().split("\\s+ ");
+            String[] parts = line.trim().split("\\s+");
             // creat an arraylist of NumberTriangle for the current line
             ArrayList<NumberTriangle> currentRow = new ArrayList<>();
 
@@ -153,20 +165,17 @@ public class NumberTriangle {
                         // set the current NumberTriangle as
                         // the left child of the first NumberTriangle of the previousRow
                         previousRows.get(i).setLeft(node);
-                    }
-                    // subcase: the current NumberTriangle is the leftmost value of the current line
-                    if (i == parts.length - 1) {
-                        // set the current NUmberTriangle as
-                        // the right child of the last NumberTriangle in the previousRow
-                        previousRows.get(i).setRight(node);
-                    }
-                    // subcase: the current NumberTriangle is not the first or the last in the line,
-                    // thus has two parents
-                    else{
-                        // set it as the left child and right child to
-                        // the corresponding NumberTriangle from the previousRow
-                        previousRows.get(i).setLeft(node);
-                        previousRows.get(i-1).setRight(node);
+                    }//not the first element
+                    else {
+                        //subcase:not the first not the last element
+                        if (i < parts.length - 1) {
+                            previousRows.get(i-1).setRight(node);
+                            previousRows.get(i).setLeft(node);
+                        }
+                        //the last element
+                        else
+                        {previousRows.get(i-1).setRight(node);
+                        }
                     }
                 }
                 // add the current NumberTriangle to the currentRow
