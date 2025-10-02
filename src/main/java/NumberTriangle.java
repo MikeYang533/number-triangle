@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                cur = cur.left;
+            } else {
+                cur = cur.right;
+            }
+        }
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -115,16 +125,31 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> prevRow = null;
 
         String line = br.readLine();
         while (line != null) {
+            line = line.trim();
+            if (!line.isEmpty()) {
+                // store the current row’s nodes
+                List<NumberTriangle> curRow = new ArrayList<>();
+                String[] parts = line.split("\\s+");
+                for (String p : parts) {
+                    curRow.add(new NumberTriangle(Integer.parseInt(p)));
+                }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+                if (prevRow != null) {
+                    for (int i = 0; i < prevRow.size(); i++) {
+                        prevRow.get(i).setLeft(curRow.get(i));
+                        prevRow.get(i).setRight(curRow.get(i + 1));
+                    }
+                } else {
+                    top = curRow.get(0);
+                }
 
-            // TODO process the line
+                prevRow = curRow;
+            }
 
-            //read the next line
             line = br.readLine();
         }
         br.close();
