@@ -146,7 +146,6 @@ public class NumberTriangle {
             for (int i = 0; i < numbers.length; i++) {
                 int value = Integer.parseInt(numbers[i]);
                 triangleRows[RowCount][i] = new NumberTriangle(value);
-
                 if (RowCount == 0) {
                     top = triangleRows[RowCount][i];
                 }
