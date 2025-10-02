@@ -118,28 +118,26 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
         NumberTriangle top = null;
-        java.util.List<NumberTriangle> prevRow = null;
+        NumberTriangle[] previous_row = null;
 
         String line = br.readLine();
         while (line != null) {
-            line = line.trim();
-            if (!line.isEmpty()) {
-                String[] parts = line.split("\\s+");
-                java.util.List<NumberTriangle> currRow = new java.util.ArrayList<>(parts.length);
-                for (String p : parts) {
-                    currRow.add(new NumberTriangle(Integer.parseInt(p)));
-                }
+            String[] parts = line.split(" ");
+            NumberTriangle[] current_row = new NumberTriangle[parts.length];
 
-                if (prevRow == null) {
-                    top = currRow.get(0);
-                } else {
-                    for (int i = 0; i < prevRow.size(); i++) {
-                        prevRow.get(i).setLeft(currRow.get(i));
-                        prevRow.get(i).setRight(currRow.get(i + 1));
-                    }
-                }
-                prevRow = currRow;
+            for (int i =0; i < parts.length; i++) {
+                current_row[i] = new NumberTriangle(Integer.parseInt(parts[i]));
             }
+            if (previous_row == null) {
+                top = current_row[0];
+            }
+            else {
+                for (int i = 0; i < previous_row.length; i++) {
+                    previous_row[0].setLeft(current_row[i]);
+                    previous_row[0].setRight(current_row[i+1]);
+                }
+            }
+            previous_row = current_row;
             line = br.readLine();
         }
         br.close();
