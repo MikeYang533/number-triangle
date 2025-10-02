@@ -91,7 +91,19 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        NumberTriangle current = this;  // start at the root of the triangle
+        for (char step : path.toCharArray()) {
+            if (step == 'l') {
+                current = current.left;
+            } else if (step == 'r') {
+                current = current.right;
+            } else {
+                throw new IllegalArgumentException("Invalid character in path: " + step);
+            }
+
+            if (current == null) {
+                throw new IllegalArgumentException("Path goes outside of the triangle: " + path);
+            }
     }
 
     /** Read in the NumberTriangle structure from a file.
