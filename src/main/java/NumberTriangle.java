@@ -1,4 +1,7 @@
+import com.sun.security.auth.NTNumericCredential;
+
 import java.io.*;
+import java.util.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,7 +91,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+
+        if (path.isEmpty())
+            return root;
+
+        else if (path.charAt(0) == 'l')
+            return this.left.retrieve(path.substring(1));
+
+        else if (path.charAt(0) == 'r')
+            return this.right.retrieve(path.substring(1));
+
         return -1;
     }
 
@@ -110,11 +122,11 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        ArrayList<NumberTriangle> prev_tops = new ArrayList<>();
+        ArrayList<NumberTriangle> cur_tops = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
@@ -122,7 +134,28 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+
+            String[] split_line = line.split(" ");
+
+            if (split_line.length == 1) {
+                top = new NumberTriangle(Integer.parseInt(split_line[0]));
+                prev_tops.add(top);
+
+            }
+            else {
+                for (int i = 0; i < split_line.length; i++){
+                    cur_tops.add(new NumberTriangle(Integer.parseInt(split_line[i])));
+                }
+
+                for (int i = 0; i < prev_tops.size(); i++){
+                    prev_tops.get(i).setLeft(cur_tops.get(i));
+                    prev_tops.get(i).setRight(cur_tops.get(i + 1));
+                }
+
+                prev_tops = cur_tops;
+                cur_tops = new ArrayList<>();
+            }
+
 
             //read the next line
             line = br.readLine();
@@ -140,5 +173,11 @@ public class NumberTriangle {
         // Problem 18 from project Euler [not for credit]
         mt.maxSumPath();
         System.out.println(mt.getRoot());
+//        System.out.println(mt.left.getRoot());
+//        System.out.println(mt.right.getRoot());
+//        String test = "c";
+//        System.out.println();
+//
+//        if (test.substring(1).equals(""));
     }
 }
