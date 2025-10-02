@@ -99,7 +99,8 @@ public class NumberTriangle {
                 return left.retrieve(rest);
             else if (Character.toLowerCase(firstCharacter) == Character.toLowerCase('r'))
                     return right.retrieve(rest);
-
+            else
+                throw new IllegalArgumentException("Invalid character in path: " + firstCharacter);
         }
 
     }
