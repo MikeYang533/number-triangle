@@ -90,7 +90,19 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-
+        NumberTriangle curr = this; // we say this node is curr :)
+        for (int i = 0; i < path.length(); i++) {
+            // loop for the number of instructions in the path
+            char ch = path.charAt(i);
+            if (ch=='l'){
+                curr = curr.left;
+                return curr.root;
+            }
+            else {
+                curr = curr.right;
+                return curr.root;
+            }
+        }
         return -1;
     }
 
