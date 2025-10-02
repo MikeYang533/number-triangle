@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()){
+            return this.root;
+        }
+        else{
+            char firstCharacter = path.charAt(0);
+            String rest = path.substring(1);
+            if(Character.toLowerCase(firstCharacter) == Character.toLowerCase('l'))
+                return left.retrieve(rest);
+            else if (Character.toLowerCase(firstCharacter) == Character.toLowerCase('r'))
+                    return right.retrieve(rest);
+
+        }
+
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -130,6 +142,7 @@ public class NumberTriangle {
         br.close();
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
