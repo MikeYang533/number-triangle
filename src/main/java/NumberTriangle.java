@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -111,24 +113,46 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
+        // build the tree bottom-up
+        List<List<Integer>> rows = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
+            String[] tokens = line.trim().split("\\s+");
+            List<Integer> row = new ArrayList<>();
+            for (String token : tokens) {
+                row.add(Integer.parseInt(token));
+            }
+            rows.add(row);
             line = br.readLine();
         }
         br.close();
+
+        // Step 2: convert rows of integers into rows of NumberTriangle nodes
+        List<List<NumberTriangle>> nodes = new ArrayList<>();
+        for (List<Integer> row : rows) {
+            List<NumberTriangle> nodeRow = new ArrayList<>();
+            for (Integer val : row) {
+                nodeRow.add(new NumberTriangle(val));
+            }
+            nodes.add(nodeRow);
+        }
+
+        // Step 3: link children bottom-up
+        for (int r = nodes.size() - 2; r >= 0; r--) {
+            for (int c = 0; c < nodes.get(r).size(); c++) {
+                NumberTriangle current = nodes.get(r).get(c);
+                current.setLeft(nodes.get(r + 1).get(c));
+                current.setRight(nodes.get(r + 1).get(c + 1));
+            }
+        }
+
+        // Step 4: the top of the triangle is the root node
+        NumberTriangle top = nodes.get(0).get(0);
+
         return top;
+
+
     }
 
     public static void main(String[] args) throws IOException {
