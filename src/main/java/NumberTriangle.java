@@ -111,7 +111,7 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
+        NumberTriangle[] prevRow = null;
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -122,7 +122,25 @@ public class NumberTriangle {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
+            String[] parts = line.trim().split("\\s+");
+            NumberTriangle[] currentRow = new NumberTriangle[parts.length];
+            for (int i = 0; i < parts.length; i++) {
+                currentRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
+            }
+
+            if (top == null) {
+                top = currentRow[0]; // first row
+            } else {
+                // link current row with previous row
+                for (int i = 0; i < currentRow.length - 1; i++) {
+                    NumberTriangle parentLeft = prevRow[i];
+                    NumberTriangle parentRight = prevRow[i + 1];
+                    parentLeft.setLeft(currentRow[i]);
+                    parentRight.setRight(currentRow[i + 1]);
+                }
+            }
+
+            prevRow = currentRow;
 
             //read the next line
             line = br.readLine();
