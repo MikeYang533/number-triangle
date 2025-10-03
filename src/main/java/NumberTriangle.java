@@ -90,8 +90,27 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path == null || path.isEmpty()) return this.root;
+
+        NumberTriangle curr = this;
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+            switch (c) {
+                case 'l':
+                    if (curr.left == null)
+                        throw new IllegalStateException("Path goes past a leaf at index " + i + " ('l')");
+                    curr = curr.left;
+                    break;
+                case 'r':
+                    if (curr.right == null)
+                        throw new IllegalStateException("Path goes past a leaf at index " + i + " ('r')");
+                    curr = curr.right;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Illegal character in path: " + c);
+            }
+        }
+        return curr.root;
     }
 //No number convention just left and right. String is l and r path to retrieve number.
     /** Read in the NumberTriangle structure from a file.
@@ -109,6 +128,7 @@ public class NumberTriangle {
         // open the file and get a BufferedReader object whose methods
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        if (inputStream == null) throw new java.io.FileNotFoundException("Not on classpath: " + fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         ArrayList<NumberTriangle> triangles = new ArrayList<>();
 
@@ -130,12 +150,8 @@ public class NumberTriangle {
             }
             else {
                 for (int i = 0; i < triangles.size(); i++) {
-                    if (i < triangles.size()) {
-                        triangles.get(i).setLeft(triangles1.get(i));
-                    }
-                    if (i > 0){
-                        triangles.get(i-1).setRight(triangles1.get(i));
-                    }
+                    triangles.get(i).setLeft(triangles1.get(i));
+                    triangles.get(i).setRight(triangles1.get(i + 1));
                 }
             }
             triangles = triangles1;
