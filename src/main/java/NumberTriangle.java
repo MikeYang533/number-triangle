@@ -95,10 +95,10 @@ public class NumberTriangle {
         }
         char first = path.charAt(0);
         String remainPath = path.substring(1);
-        if(first == 'r'){
+        if(first == 'l'){
             return this.left.retrieve(remainPath);
         }
-        if(first == 'l'){
+        if(first == 'r'){
             return this.right.retrieve(remainPath);
         }
         return -1;
