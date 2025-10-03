@@ -119,9 +119,6 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
             String[] parts = line.trim().split("\\s+");
             NumberTriangle[] currentRow = new NumberTriangle[parts.length];
             for (int i = 0; i < parts.length; i++) {
