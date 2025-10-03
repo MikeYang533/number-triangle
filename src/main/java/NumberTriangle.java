@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -68,6 +69,7 @@ public class NumberTriangle {
 
 
     public boolean isLeaf() {
+
         return right == null && left == null;
     }
 
@@ -91,7 +93,7 @@ public class NumberTriangle {
         // TODO implement this method
         return -1;
     }
-
+//No number convention just left and right. String is l and r path to retrieve number.
     /** Read in the NumberTriangle structure from a file.
      *
      * You may assume that it is a valid format with a height of at least 1,
@@ -108,9 +110,7 @@ public class NumberTriangle {
         // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> triangles = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -119,12 +119,27 @@ public class NumberTriangle {
         String line = br.readLine();
         while (line != null) {
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            String[] nums = line.trim().split("\\s+");
+            ArrayList<NumberTriangle> triangles1 = new ArrayList<>();
+            for (String num : nums) {
+                NumberTriangle obj = new NumberTriangle(Integer.parseInt(num));
+                triangles1.add(obj);
+            }
+            if (triangles.isEmpty()) {
+                top = triangles1.get(0);
+            }
+            else {
+                for (int i = 0; i < triangles.size(); i++) {
+                    if (i < triangles.size()) {
+                        triangles.get(i).setLeft(triangles1.get(i));
+                    }
+                    if (i > 0){
+                        triangles.get(i-1).setRight(triangles1.get(i));
+                    }
+                }
+            }
+            triangles = triangles1;
 
-            // TODO process the line
-
-            //read the next line
             line = br.readLine();
         }
         br.close();
