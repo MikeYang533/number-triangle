@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,21 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if(path.isEmpty()) {
+            return getRoot();
+        }
+        int i = 0;
+        NumberTriangle curr = this;
+        while (i < path.length()) {
+            if (path.charAt(i) == 'l') {
+                curr = curr.left;
+            }
+            if (path.charAt(i) == 'r') {
+                curr = curr.right;
+            }
+            i++;
+        }
+        return curr.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,8 +124,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
 
+        List<NumberTriangle> prevRow = new ArrayList<>();
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
@@ -120,9 +134,30 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+//            System.out.println(line);
 
-            // TODO process the line
+
+            String[] nums = line.split("\\s+");
+            List<NumberTriangle> curRow = new ArrayList<>(nums.length);
+            for (String a : nums) {
+                curRow.add(new NumberTriangle(Integer.parseInt(a)));
+            }
+
+            // First line root
+            if (top == null) {
+                top = curRow.get(0);
+            }
+
+            // left=cur[j]，right=cur[j+1]
+            if (!prevRow.isEmpty()) {
+                for (int j = 0; j < prevRow.size(); j++) {
+                    NumberTriangle parent = prevRow.get(j);
+                    parent.setLeft(curRow.get(j));
+                    parent.setRight(curRow.get(j + 1));
+                }
+            }
+
+            prevRow = curRow;
 
             //read the next line
             line = br.readLine();
