@@ -88,8 +88,17 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle cur = this;
+        if (path == null) {return root;}
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l'){
+                cur = cur.left;
+            } else if (ch == 'r'){
+                cur = cur.right;
+            }
+        }
+        return cur.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,22 +118,28 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prev = null;
 
         String line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
-
-            //read the next line
+            String t = line.trim();
+            if (t.isEmpty()){ line = br.readLine(); continue;}
+            String[] parts = t.split("\\s+");
+            NumberTriangle[] row = new NumberTriangle[parts.length];
+            for (int i=0; i < parts.length; i++){
+                row[i] = new NumberTriangle(Integer.parseInt(parts[i]));
+            }
+            if (top == null) top = row[0];
+            if (prev != null){
+                for (int j=0; j<prev.length; j++){
+                    prev[j].setLeft(row[j]);
+                    prev[j].setRight(row[j+1]);
+                }
+            }
+            prev = row;
             line = br.readLine();
         }
         br.close();
