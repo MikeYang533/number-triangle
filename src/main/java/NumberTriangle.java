@@ -88,8 +88,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+        for (char step: path.toCharArray()) {
+            if (c == 'r') {
+                current = current.right;
+            }
+            else if (c == 'l') {
+                current = current.left;
+            }
+        }
+        return current.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -115,6 +123,7 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<List<NumberTriangle>> triangleLevels = new ArrayList<>();
 
         String line = br.readLine();
         while (line != null) {
@@ -123,11 +132,33 @@ public class NumberTriangle {
             System.out.println(line);
 
             // TODO process the line
+            String[] parts = line.trim().split("\\s+");
+            List<NumberTriangle> row = new ArrayList<>();
 
+            for (int i = 0; i < parts.length; i++)
+            {
+                nums[i] = Integer.parseInt(parts[i]);
+                NumberTriangle node = new NumberTriangle(nums[i]);
+                row.add(node);
+            }
+            //top = (NumberTriangle) nums[0][0];
             //read the next line
+            triangleLevels.add(row);
             line = br.readLine();
         }
         br.close();
+
+        for (int i = 0; i < triangleLevels.size() -1; i++) {
+
+            List<NumberTriangle> current = triangleLevels.get(i);
+            List<NumberTriangle> next = triangleLevels.get(i + 1);
+            for (int j = 0; j < current.size(); j++) {
+                current.get(j).setLeft(next.get(j));
+                current.get(j).setRight(next.get(j + 1));
+            }
+        }
+
+        top = triangleLevels.get(0).get(0);
         return top;
     }
 
