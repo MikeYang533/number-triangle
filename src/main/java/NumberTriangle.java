@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -64,6 +65,7 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+
     }
 
 
@@ -88,8 +90,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if(path.isEmpty()) {
+            return this.root;
+        }
+        char direction = path.charAt(0);
+        String rest = path.substring(1);
+
+        if (direction == 'l' && left != null) {
+            return left.retrieve(rest);
+        } else if (direction == 'r' && right != null) {
+            return right.retrieve(rest);
+        } else {
+            throw new IllegalArgumentException("Invalid path: " + path);
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -110,7 +123,8 @@ public class NumberTriangle {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
 
-        // TODO define any variables that you want to use to store things
+        // Store rows of NumberTriangle objects
+        java.util.List<java.util.List<NumberTriangle>> rows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -118,17 +132,27 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
+            String[] parts = line.trim().split("\\s+");
+            java.util.List<NumberTriangle> currentRow = new ArrayList<>();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            for (String num : parts) {
+                currentRow.add(new NumberTriangle(Integer.parseInt(num)));
+            }
 
-            // TODO process the line
+            if (!rows.isEmpty()) {
+                java.util.List<NumberTriangle> prevRow = rows.get(rows.size() - 1);
+                for (int i = 0; i < prevRow.size(); i++) {
+                    prevRow.get(i).setLeft(currentRow.get(i));
+                    prevRow.get(i).setRight(currentRow.get(i + 1));
+                }
+            }
 
             //read the next line
+            rows.add(currentRow);
             line = br.readLine();
         }
         br.close();
-        return top;
+        return rows.get(0).get(0);
     }
 
     public static void main(String[] args) throws IOException {
