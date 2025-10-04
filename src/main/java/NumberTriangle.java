@@ -3,7 +3,7 @@ import java.io.*;
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
  *
- * Note: This is like a tree, but some nodes in the structure have two parents.
+ * Note: This is lcike a tree, but some nodes in the struture have two parents.
  *
  * The structure is shown below. Observe that the parents of e are b and c, whereas
  * d and f each only have one parent. Each row is complete and will never be missing
@@ -88,8 +88,6 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -111,21 +109,34 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        NumberTriangle[] prevArr = null;
+        int index = 0;
 
         String line = br.readLine();
         while (line != null) {
+            index++;
+            String[] arr = line.split(" ");  // ["1", "2", ...]
+            NumberTriangle[] currArr = new NumberTriangle[arr.length];
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            for (int i = 0; i < arr.length; i++) {
+                int num = Integer.parseInt(arr[i]);
+                currArr[i] = new NumberTriangle(num);
+            }
+            if (index == 1){
+                top = currArr[0];
+            } else {
+                for (int i = 0; i < prevArr.length; i++) {
+                    prevArr[i].left = currArr[i];
+                    prevArr[i].right = currArr[i + 1];
+                }
+            }
+            prevArr = currArr;
 
-            // TODO process the line
-
-            //read the next line
             line = br.readLine();
+
         }
         br.close();
         return top;
