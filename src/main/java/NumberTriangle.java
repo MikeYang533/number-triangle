@@ -88,7 +88,7 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        //TODO
         return -1;
     }
 
@@ -111,24 +111,47 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
-
+        int depth = 0;
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
-
         String line = br.readLine();
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
 
-            // TODO process the line
-
+            String[] numbers = line.split(" ");
+            for (int i = 0; i < numbers.length; i++) {
+                int numberInt = Integer.parseInt(numbers[i]);
+                NumberTriangle triangle = new NumberTriangle(numberInt);
+                if(top == null)
+                    top = triangle;
+                NumberTriangle track = top;
+                helper(track, triangle, depth);
+            }
             //read the next line
+            depth++;
             line = br.readLine();
         }
         br.close();
         return top;
+    }
+
+    private static Boolean helper(NumberTriangle top, NumberTriangle triangle, int depth) {
+        if(depth == 0)
+            return true;
+        if(top.left == null){
+            top.left = triangle;
+            return false;
+        }else if(top.right == null){
+            top.right = triangle;
+            return true;
+        }else{
+            if(NumberTriangle.helper(top.left, triangle, depth - 1)){
+                return NumberTriangle.helper(top.right, triangle, depth - 1);
+            }else
+                return false;
+        }
     }
 
     public static void main(String[] args) throws IOException {
