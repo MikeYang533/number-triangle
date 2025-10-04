@@ -88,7 +88,21 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        // DONE implement this method
+        if (path.isEmpty()) {
+            return getRoot();
+        }
+
+        else {
+            char current = path.charAt(0);
+            if (current == 'l' && left != null) {
+                return left.retrieve(path.substring(1));
+            }
+            else if (current == 'r' && right != null) {
+                return right.retrieve(path.substring(1));
+            }
+        }
+
         return -1;
     }
 
