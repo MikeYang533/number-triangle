@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +90,23 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle current = this;
+
+        // Follow the path character by character
+        for (char direction : path.toCharArray()) {
+            if (direction == 'l') {
+                current = current.left;
+            } else if (direction == 'r') {
+                current = current.right;
+            }
+
+            // Safety check - though the problem says we can assume valid path
+            if (current == null) {
+                return -1; // or throw an exception
+            }
+        }
+
+        return current.getRoot();
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,8 +126,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        List<List<NumberTriangle>> rows = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -118,16 +134,35 @@ public class NumberTriangle {
 
         String line = br.readLine();
         while (line != null) {
+            String[] numbers = line.trim().split("\\s+");
+            List<NumberTriangle> currentRow = new ArrayList<>();
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
+            for (String numStr : numbers) {
+                int num = Integer.parseInt(numStr);
+                currentRow.add(new NumberTriangle(num));
+            }
+            rows.add(currentRow);
 
             //read the next line
             line = br.readLine();
         }
         br.close();
+
+        // Build the tree structure
+        if (!rows.isEmpty()) {
+            for (int i = 0; i < rows.size() - 1; i++) {
+                List<NumberTriangle> currentRow = rows.get(i);
+                List<NumberTriangle> nextRow = rows.get(i + 1);
+
+                for (int j = 0; j < currentRow.size(); j++) {
+                    NumberTriangle currentNode = currentRow.get(j);
+                    currentNode.setLeft(nextRow.get(j));
+                    currentNode.setRight(nextRow.get(j + 1));
+                }
+            }
+            top = rows.get(0).get(0);
+        }
+
         return top;
     }
 
